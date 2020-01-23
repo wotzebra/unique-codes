@@ -1,0 +1,42 @@
+{
+    "name": "nextapps/unique-codes",
+    "description": "Create unique (and random-looking) codes",
+    "keywords": [
+        "nextapps",
+        "unique-codes"
+    ],
+    "homepage": "https://github.com/nextapps/unique-codes",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Günther Debrauwer",
+            "email": "gunther@nextapps.be",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Nextapps\\UniqueCodes\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Nextapps\\UniqueCodes\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
