@@ -23,12 +23,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Nextapps\\UniqueCodes\\": "src"
+            "NextApps\\UniqueCodes\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Nextapps\\UniqueCodes\\Tests\\": "tests"
+            "NextApps\\UniqueCodes\\Tests\\": "tests"
         }
     },
     "scripts": {

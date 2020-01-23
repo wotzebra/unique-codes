@@ -1,6 +1,6 @@
 <?php
 
-namespace Nextapps\UniqueCodes\Tests;
+namespace NextApps\UniqueCodes\Tests;
 
 use PHPUnit\Framework\TestCase;
 
