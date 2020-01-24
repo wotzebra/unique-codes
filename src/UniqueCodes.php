@@ -1,6 +1,6 @@
 <?php
 
-namespace NextApps\UniqueCodes;
+namespace App\UniqueCodes;
 
 use RuntimeException;
 
@@ -9,14 +9,14 @@ class UniqueCodes
     /**
      * The prime number that is used to convert a number to a unique other number within the maximum range.
      *
-     * @var int|double
+     * @var float
      */
     protected $prime;
 
     /**
      * The prime number that is one larger than the maximum number that can be converted to a code.
      *
-     * @var int|double
+     * @var float
      */
     protected $maxPrime;
 
@@ -65,11 +65,11 @@ class UniqueCodes
     /**
      * Set the prime number.
      *
-     * @param int|double $prime
+     * @param float $prime
      *
      * @return self
      */
-    public function setPrime($prime)
+    public function setPrime(float $prime)
     {
         $this->prime = $prime;
 
@@ -79,11 +79,11 @@ class UniqueCodes
     /**
      * Set the max prime number.
      *
-     * @param int|double $prime
+     * @param float $maxPrime
      *
      * @return self
      */
-    public function setMaxPrime($maxPrime)
+    public function setMaxPrime(float $maxPrime)
     {
         $this->maxPrime = $maxPrime;
 
@@ -93,7 +93,7 @@ class UniqueCodes
     /**
      * Set the suffix.
      *
-     * @param string $prime
+     * @param string $suffix
      *
      * @return self
      */
@@ -107,7 +107,7 @@ class UniqueCodes
     /**
      * Set the prefix.
      *
-     * @param string $prime
+     * @param string $prefix
      *
      * @return self
      */
@@ -137,7 +137,7 @@ class UniqueCodes
     /**
      * Set the characters.
      *
-     * @param string|array $characters
+     * @param array|string $characters
      *
      * @return self
      */
@@ -172,8 +172,6 @@ class UniqueCodes
      * @param int $start
      * @param int $amount
      *
-     * @throws \RuntimeException
-     *
      * @return array
      */
     public function generate(int $start, int $amount = 1)
@@ -182,7 +180,9 @@ class UniqueCodes
 
         $codes = [];
 
-        for ($i = $start; $i < $start + $amount; $i++) {
+        $end = $start + $amount;
+
+        for ($i = $start; $i < $end; $i++) {
             $number = $this->mapNumber($i);
             $string = $this->encodeNumber($number);
 
@@ -195,9 +195,9 @@ class UniqueCodes
     /**
      * Map number to a unique other number smaller than the max prime number.
      *
-     * @param int|double $number
+     * @param float|int $number
      *
-     * @return int|double
+     * @return float|int
      */
     protected function mapNumber($number)
     {
@@ -207,7 +207,7 @@ class UniqueCodes
     /**
      * Encode number into characters.
      *
-     * @param int|double $number
+     * @param float|int $number
      *
      * @return string
      */
@@ -262,28 +262,40 @@ class UniqueCodes
      * @param int $start
      * @param int $amount
      *
+     * @throws \RuntimeException
+     *
      * @return void
      */
     protected function validateInput(int $start, int $amount = 1)
     {
         if ($this->prime <= $this->maxPrime) {
-            throw new RuntimeException('Prime number must be larger than the max prime number');
+            throw new RuntimeException(
+                'Prime number must be larger than the max prime number'
+            );
         }
 
         if (strlen($this->characters) <= $this->length) {
-            throw new RuntimeException('The amount of allowed characters must be bigger or equal to the length of the code');
+            throw new RuntimeException(
+                'The amount of allowed characters must be bigger or equal to the length of the code'
+            );
         }
 
         if (count(array_unique(str_split($this->characters))) !== strlen($this->characters)) {
-            throw new RuntimeException('The list of allowed characters can not contain duplicates');
+            throw new RuntimeException(
+                'The list of allowed characters can not contain duplicates'
+            );
         }
 
         if ($this->getMaximumUniqueCodes() <= $this->maxPrime) {
-            throw new RuntimeException('The length of the code is too short to create the amount of combinations equal to the max prime number');
+            throw new RuntimeException(
+                'The length of the code is too short to create the amount of combinations equal to the max prime number'
+            );
         }
 
         if ($amount >= $this->maxPrime) {
-            throw new RuntimeException('The amount of codes you create can not be bigger or equal to the max prime number');
+            throw new RuntimeException(
+                'The amount of codes you create can not be bigger or equal to the max prime number'
+            );
         }
     }
 
@@ -296,8 +308,8 @@ class UniqueCodes
     {
         $maxCombinations = 1;
 
-        for ($i = $this->length; $i >= 1; $i--) {
-            $maxCombinations = $maxCombinations * $i;
+        for ($i = 0; $i < $this->length; $i++) {
+            $maxCombinations = $maxCombinations * (strlen($this->characters) - $i);
         }
 
         return $maxCombinations;
