@@ -16,5 +16,11 @@ checks:
         fix_line_ending: true
         fix_identation_4spaces: true
         fix_doc_comments: true
-tools:
-    php_code_coverage: true
+nodes:
+    coverage:
+      tests:
+        override:
+          - command: ./vendor/bin/phpunit
+            coverage:
+              file: build/logs/clover.xml
+              format: clover
