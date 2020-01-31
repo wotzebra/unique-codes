@@ -4,7 +4,7 @@ namespace App\UniqueCodes;
 
 use RuntimeException;
 
-class UniqueCodes
+class UniqueCodesGenerator
 {
     /**
      * The prime number that is used to convert a number to a unique other number within the maximum range.
@@ -23,28 +23,28 @@ class UniqueCodes
     /**
      * The suffix that will be added to every code.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $suffix;
 
     /**
      * The prefix that will be added to every code.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $prefix;
 
     /**
      * The delimiter that separates the different parts of the generated code.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $delimiter;
 
     /**
      * The size of every part of the generated code.
      *
-     * @var null|int
+     * @var int|null
      */
     protected $splitLength;
 
@@ -172,7 +172,7 @@ class UniqueCodes
      * @param int $start
      * @param int $amount
      *
-     * @return array
+     * @return Generator<string>
      */
     public function generate(int $start, int $amount = 1)
     {
@@ -268,34 +268,40 @@ class UniqueCodes
      */
     protected function validateInput(int $start, int $amount = 1)
     {
+        if (empty($this->prime)) {
+            throw new RuntimeException('Prime number must be specified');
+        }
+
+        if (empty($this->maxPrime)) {
+            throw new RuntimeException('Max prime number must be specified');
+        }
+
+        if (empty($this->characters)) {
+            throw new RuntimeException('Character list must be specified');
+        }
+
+        if (empty($this->length)) {
+            throw new RuntimeException('Length must be specified');
+        }
+
         if ($this->prime <= $this->maxPrime) {
-            throw new RuntimeException(
-                'Prime number must be larger than the max prime number'
-            );
+            throw new RuntimeException('Prime number must be larger than the max prime number');
         }
 
         if (strlen($this->characters) <= $this->length) {
-            throw new RuntimeException(
-                'The amount of allowed characters must be bigger or equal to the length of the code'
-            );
+            throw new RuntimeException('The size of the character list must be bigger or equal to the length of the code');
         }
 
         if (count(array_unique(str_split($this->characters))) !== strlen($this->characters)) {
-            throw new RuntimeException(
-                'The list of allowed characters can not contain duplicates'
-            );
+            throw new RuntimeException('The character list can not contain duplicates');
         }
 
         if ($this->getMaximumUniqueCodes() <= $this->maxPrime) {
-            throw new RuntimeException(
-                'The length of the code is too short to create the amount of combinations equal to the max prime number'
-            );
+            throw new RuntimeException('The length of the code is too short to create the number of unique codes equal to the max prime number');
         }
 
         if ($amount >= $this->maxPrime) {
-            throw new RuntimeException(
-                'The amount of codes you create can not be bigger or equal to the max prime number'
-            );
+            throw new RuntimeException('The number of codes you create can not be bigger or equal to the max prime number');
         }
     }
 
