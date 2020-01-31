@@ -240,7 +240,7 @@ class UniqueCodes
         $code = '';
 
         if ($this->prefix !== null) {
-            $code .= $this->prefix . $this->delimiter;
+            $code .= $this->prefix.$this->delimiter;
         }
 
         if ($this->splitLength !== null) {
@@ -250,7 +250,7 @@ class UniqueCodes
         }
 
         if ($this->suffix !== null) {
-            $code .= $this->delimiter . $this->suffix;
+            $code .= $this->delimiter.$this->suffix;
         }
 
         return $code;
