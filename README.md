@@ -46,25 +46,57 @@ This prime number is used to obfuscate a number between 1 and the max prime numb
 The max prime determines the maximum amount of unique codes you can generate. If you provide `101`, then you can generate codes from 1 to 100.
 This prime number must be bigger than the prime number you provide to the `setPrime` method.
 
-### setCharacters($string)
+#### setCharacters($string)
 
 The character list contains all the characters that can be used to build a unique code.
 
-### setLength($number)
+#### setLength($number)
 
 The length of each unique code.
 
-### setPrefix($string)
+#### setPrefix($string)
 
 The prefix of each unique code.
 
-### setSuffix($string)
+#### setSuffix($string)
 
 The suffix of each unique code.
 
-### setDelimiter($string, $number)
+#### setDelimiter($string, $number)
 
 The code can be split in different pieces and glued together using the specified delimiter.
+
+## How does it work?
+
+The code generation consists of 2 steps:
+- Obfuscating sequential numbers
+- Encoding the obfuscated number
+
+If you encode sequential numbers, you will still see that the encoded strings are sequential. To remove the sequential nature, we use 'modular multiplicative inverse'.
+
+You define the upper limit of your range. This determines how max number you can obfuscate. Then every number is mapped to a unique obfuscated number between 1 and the upper limit. You multiply the input number with a random prime number, and you determine the remainder of the division of your multiplied input number by the upper limit of the range.
+
+```
+$obfuscatedNumber = ($inputNumber * $primeNumber) % $maxPrimeNumber
+```
+
+In the next step, the obfuscated number is encoded to string.
+
+```
+$string = '';
+$characters = 'LQJCKZM4WDPT69S7XRGANY23VBH58F1';
+
+for ($i = 0; $i < $this->length; $i++) {
+    $digit = $number % strlen($characters);
+
+    $string .= $characters[$digit];
+    $characters = strtr($characters, [$characters[$digit] => '']);
+
+    $number = $number / strlen($characters);
+}
+
+return $string;
+```
 
 ## Testing
 
