@@ -1,9 +1,11 @@
 {
     "name": "nextapps/unique-codes",
-    "description": "Create unique (and random-looking) codes",
+    "description": "Create unique, random-looking codes",
     "keywords": [
         "nextapps",
-        "unique-codes"
+        "unique-codes",
+        "vouchers",
+        "coupons"
     ],
     "homepage": "https://github.com/nextapps-be/unique-codes",
     "license": "MIT",
