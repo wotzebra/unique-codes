@@ -37,11 +37,11 @@ Certain setters are required to generate unique codes:
 * `setCharacters()`
 * `setLength()`
 
-### setPrime($number)
+#### setPrime($number)
 
 This prime number is used to obfuscate a number between 1 and the max prime number.
 
-### setMaxPrime($number)
+#### setMaxPrime($number)
 
 The max prime determines the maximum amount of unique codes you can generate. If you provide `101`, then you can generate codes from 1 to 100.
 This prime number must be bigger than the prime number you provide to the `setPrime` method.
