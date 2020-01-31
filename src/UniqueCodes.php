@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UniqueCodes;
+namespace NextApps\UniqueCodes;
 
 use RuntimeException;
 
@@ -300,7 +300,7 @@ class UniqueCodes
             throw new RuntimeException('Length must be specified');
         }
 
-        if ($this->prime > $this->maxPrime) {
+        if ($this->prime >= $this->maxPrime) {
             throw new RuntimeException('Prime number must be smaller than the max prime number');
         }
 
