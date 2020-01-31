@@ -72,31 +72,19 @@ The code generation consists of 2 steps:
 - Obfuscating sequential numbers
 - Encoding the obfuscated number
 
+#### Obfuscating sequential numbers
+
 If you encode sequential numbers, you will still see that the encoded strings are sequential. To remove the sequential nature, we use 'modular multiplicative inverse'.
 
-You define the upper limit of your range. This determines how max number you can obfuscate. Then every number is mapped to a unique obfuscated number between 1 and the upper limit. You multiply the input number with a random prime number, and you determine the remainder of the division of your multiplied input number by the upper limit of the range.
+You define the upper limit of your range. This determines the maximum number you can obfuscate. Then every number is mapped to a unique obfuscated number between 1 and the upper limit. You multiply the input number with a random prime number, and you determine the remainder of the division of your multiplied input number by the upper limit of the range.
 
 ```
 $obfuscatedNumber = ($inputNumber * $primeNumber) % $maxPrimeNumber
 ```
 
-In the next step, the obfuscated number is encoded to string.
+#### Encoding the obfuscated number
 
-```
-$string = '';
-$characters = 'LQJCKZM4WDPT69S7XRGANY23VBH58F1';
-
-for ($i = 0; $i < $this->length; $i++) {
-    $digit = $number % strlen($characters);
-
-    $string .= $characters[$digit];
-    $characters = strtr($characters, [$characters[$digit] => '']);
-
-    $number = $number / strlen($characters);
-}
-
-return $string;
-```
+In the next step, the obfuscated number is encoded to string. This is just a base conversion using division and modulo. If a character has been added to the encoded string, then that character is removed from the available character list for that code. This ensures a code never contains duplicate characters.
 
 ## Testing
 
