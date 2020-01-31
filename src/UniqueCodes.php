@@ -4,7 +4,7 @@ namespace App\UniqueCodes;
 
 use RuntimeException;
 
-class UniqueCodesGenerator
+class UniqueCodes
 {
     /**
      * The prime number that is used to convert a number to a unique other number within the maximum range.
@@ -122,7 +122,7 @@ class UniqueCodesGenerator
      * Set the delimiter.
      *
      * @param string $delimiter
-     * @param null|int $splitLength
+     * @param int|null $splitLength
      *
      * @return self
      */
@@ -169,12 +169,12 @@ class UniqueCodesGenerator
     /**
      * Generate the necessary amount of codes.
      *
-     * @param int $start
-     * @param int $amount
+     * @param float $start
+     * @param float $amount
      *
-     * @return Generator<string>
+     * @return array
      */
-    public function generate(int $start, int $amount = 1)
+    public function generate(float $start, float $amount = 1)
     {
         $this->validateInput($start, $amount);
 
@@ -195,11 +195,11 @@ class UniqueCodesGenerator
     /**
      * Map number to a unique other number smaller than the max prime number.
      *
-     * @param float|int $number
+     * @param float $number
      *
-     * @return float|int
+     * @return float
      */
-    protected function mapNumber($number)
+    protected function mapNumber(float $number)
     {
         return ($number * $this->prime) % $this->maxPrime;
     }
@@ -207,11 +207,11 @@ class UniqueCodesGenerator
     /**
      * Encode number into characters.
      *
-     * @param float|int $number
+     * @param float $number
      *
      * @return string
      */
-    protected function encodeNumber($number)
+    protected function encodeNumber(float $number)
     {
         $string = '';
         $characters = $this->characters;
@@ -220,7 +220,7 @@ class UniqueCodesGenerator
             $digit = $number % strlen($characters);
 
             $string .= $characters[$digit];
-            $characters = strtr($characters, $characters[$digit], '');
+            $characters = strtr($characters, [$characters[$digit] => '']);
 
             $number = $number / strlen($characters);
         }
@@ -259,14 +259,14 @@ class UniqueCodesGenerator
     /**
      * Check if all property values are valid.
      *
-     * @param int $start
-     * @param int $amount
+     * @param float $start
+     * @param float $amount
      *
      * @throws \RuntimeException
      *
      * @return void
      */
-    protected function validateInput(int $start, int $amount = 1)
+    protected function validateInput(float $start, float $amount = 1)
     {
         if (empty($this->prime)) {
             throw new RuntimeException('Prime number must be specified');
@@ -274,6 +274,22 @@ class UniqueCodesGenerator
 
         if (empty($this->maxPrime)) {
             throw new RuntimeException('Max prime number must be specified');
+        }
+
+        if (floor($this->prime) != $this->prime) {
+            throw new RuntimeException('Prime number must be an integer');
+        }
+
+        if (floor($this->maxPrime) != $this->maxPrime) {
+            throw new RuntimeException('Max prime number must be an integer');
+        }
+
+        if (floor($start) != $start) {
+            throw new RuntimeException('Start must be an integer');
+        }
+
+        if (floor($amount) != $amount) {
+            throw new RuntimeException('Amount must be an integer');
         }
 
         if (empty($this->characters)) {
@@ -284,12 +300,22 @@ class UniqueCodesGenerator
             throw new RuntimeException('Length must be specified');
         }
 
-        if ($this->prime <= $this->maxPrime) {
-            throw new RuntimeException('Prime number must be larger than the max prime number');
+        if ($this->prime > $this->maxPrime) {
+            throw new RuntimeException('Prime number must be smaller than the max prime number');
+        }
+
+        if (! $this->isPrime($this->prime)) {
+            throw new RuntimeException('Prime number must be prime');
+        }
+
+        if (! $this->isPrime($this->maxPrime)) {
+            throw new RuntimeException('Max prime number must be prime');
         }
 
         if (strlen($this->characters) <= $this->length) {
-            throw new RuntimeException('The size of the character list must be bigger or equal to the length of the code');
+            throw new RuntimeException(
+                'The size of the character list must be bigger or equal to the length of the code'
+            );
         }
 
         if (count(array_unique(str_split($this->characters))) !== strlen($this->characters)) {
@@ -297,11 +323,15 @@ class UniqueCodesGenerator
         }
 
         if ($this->getMaximumUniqueCodes() <= $this->maxPrime) {
-            throw new RuntimeException('The length of the code is too short to create the number of unique codes equal to the max prime number');
+            throw new RuntimeException(
+                'The length of the code is too short to create the number of unique codes equal to the max prime number'
+            );
         }
 
-        if ($amount >= $this->maxPrime) {
-            throw new RuntimeException('The number of codes you create can not be bigger or equal to the max prime number');
+        if (($start + $amount - 1) >= $this->maxPrime) {
+            throw new RuntimeException(
+                'The number of codes you create can not be bigger or equal to the max prime number'
+            );
         }
     }
 
@@ -319,5 +349,33 @@ class UniqueCodesGenerator
         }
 
         return $maxCombinations;
+    }
+
+    /**
+     * Check if number is prime.
+     *
+     * @param float $number
+     *
+     * @return void
+     */
+    public function isPrime(float $number)
+    {
+        if ($number == 1) {
+            return false;
+        }
+
+        if ($number == 2) {
+            return true;
+        }
+
+        $x = floor(sqrt($number));
+
+        for ($i = 2; $i <= $x; $i++) {
+            if ($number % $i == 0) {
+                break;
+            }
+        }
+
+        return $x == $i - 1;
     }
 }
