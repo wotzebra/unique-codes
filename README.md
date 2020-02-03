@@ -5,12 +5,12 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/nextapps-be/unique-codes.svg?style=flat-square)](https://scrutinizer-ci.com/g/nextapps-be/unique-codes)
 [![Total Downloads](https://img.shields.io/packagist/dt/nextapps/unique-codes.svg?style=flat-square)](https://packagist.org/packages/nextapps/unique-codes)
 
-This package generates unique, random-looking codes, which you can use for vouchers, coupons, ...
+This package generates unique, random-looking codes. These codes can be used for vouchers, coupons, ...
 
 ``` php
 use NextApps\UniqueCodes\UniqueCodes;
 
-// Generate 100 unique codes
+// Generate 100 unique codes for numbers 1 to 100
 $codes = (new UniqueCodes())
     ->setPrime(184259)
     ->setMaxPrime(7230323)
