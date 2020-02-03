@@ -18,7 +18,7 @@ $codes = (new UniqueCodes())
     ->setLength(6)
     ->generate(1, 100);
 
-// Result: LQJCKZ, HYW4LQ, Y9GXLQ,...
+// Result: LQJCKZ, HYW4LQ, Y9GXLQ, ...
 ```
 
 ## Installation
