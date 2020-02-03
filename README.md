@@ -31,6 +31,22 @@ composer require nextapps/unique-codes
 
 ## Usage
 
+### Generate() method
+
+To generate unique codes, you provide a start number and an amount. It will generate codes using the numbers in that range. Each number will always generate the same unique, random-looking code. This means you should ensure you never use the same numbers again. This could be achieved by saving which number ranges you already used or by always using the next auto-incrementing id in your codes database table.
+
+If a lot of codes need to be generated at the same time, it can cause a lot of memory usage. In order to prevent this, a [Generator](https://www.php.net/manual/en/class.generator.php) is returned by default. If you want an array instead, you can set the third parameter of the `generate` method to `true`.
+
+```php
+// Returns Generator to create 100 codes.
+->generate(1, 100);
+
+// Returns array with 100 created codes.
+->generate(1, 100, true);
+```
+
+### Setters
+
 Certain setters are required to generate unique codes:
 * `setPrime()`
 * `setMaxPrime()`
