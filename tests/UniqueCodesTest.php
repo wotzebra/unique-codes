@@ -351,34 +351,6 @@ class UniqueCodesTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_exception_if_prime_number_is_not_prime()
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Prime number must be prime');
-
-        (new UniqueCodes())
-            ->setPrime(52)
-            ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-            ->setLength(6)
-            ->generate(1, 100);
-    }
-
-    /** @test */
-    public function it_throws_exception_if_max_prime_number_is_not_prime()
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Max prime number must be prime');
-
-        (new UniqueCodes())
-            ->setPrime(17)
-            ->setMaxPrime(1001)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-            ->setLength(6)
-            ->generate(1, 100);
-    }
-
-    /** @test */
     public function it_throws_exception_if_size_of_character_list_is_smaller_than_specified_code_length()
     {
         $this->expectException(RuntimeException::class);
@@ -424,7 +396,7 @@ class UniqueCodesTest extends TestCase
     public function it_throws_exception_if_max_prime_number_is_too_big_for_the_specified_character_list_and_code_length()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('The length of the code is too short to create the number of unique codes equal to the max prime number');
+        $this->expectExceptionMessage('The length of the code is too short or the character list is too small to create the number of unique codes equal to the max prime number');
 
         (new UniqueCodes())
             ->setPrime(17)
