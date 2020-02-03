@@ -9,14 +9,14 @@ class UniqueCodes
     /**
      * The prime number that is used to convert a number to a unique other number within the maximum range.
      *
-     * @var float
+     * @var int
      */
     protected $prime;
 
     /**
      * The prime number that is one larger than the maximum number that can be converted to a code.
      *
-     * @var float
+     * @var int
      */
     protected $maxPrime;
 
@@ -65,11 +65,11 @@ class UniqueCodes
     /**
      * Set the prime number.
      *
-     * @param float $prime
+     * @param int $prime
      *
      * @return self
      */
-    public function setPrime(float $prime)
+    public function setPrime(int $prime)
     {
         $this->prime = $prime;
 
@@ -79,11 +79,11 @@ class UniqueCodes
     /**
      * Set the max prime number.
      *
-     * @param float $maxPrime
+     * @param int $maxPrime
      *
      * @return self
      */
-    public function setMaxPrime(float $maxPrime)
+    public function setMaxPrime(int $maxPrime)
     {
         $this->maxPrime = $maxPrime;
 
@@ -169,13 +169,13 @@ class UniqueCodes
     /**
      * Generate the necessary amount of codes.
      *
-     * @param float $start
-     * @param float $amount
+     * @param int $start
+     * @param int $amount
      * @param bool $toArray
      *
      * @return array|\Generator<string>
      */
-    public function generate(float $start, float $amount = 1, bool $toArray = false)
+    public function generate(int $start, int $amount = 1, bool $toArray = false)
     {
         $this->validateInput($start, $amount);
 
@@ -194,11 +194,11 @@ class UniqueCodes
     /**
      * Map number to a unique other number smaller than the max prime number.
      *
-     * @param float $number
+     * @param int $number
      *
-     * @return float
+     * @return int
      */
-    protected function obfuscateNumber(float $number)
+    protected function obfuscateNumber(int $number)
     {
         return ($number * $this->prime) % $this->maxPrime;
     }
@@ -206,11 +206,11 @@ class UniqueCodes
     /**
      * Encode number into characters.
      *
-     * @param float $number
+     * @param int $number
      *
      * @return string
      */
-    protected function encodeNumber(float $number)
+    protected function encodeNumber(int $number)
     {
         $string = '';
         $characters = $this->characters;
@@ -258,14 +258,14 @@ class UniqueCodes
     /**
      * Check if all property values are valid.
      *
-     * @param float $start
-     * @param float $amount
+     * @param int $start
+     * @param int $amount
      *
      * @throws \RuntimeException
      *
      * @return void
      */
-    protected function validateInput(float $start, float $amount = 1)
+    protected function validateInput(int $start, int $amount = 1)
     {
         if (empty($this->prime)) {
             throw new RuntimeException('Prime number must be specified');
@@ -273,22 +273,6 @@ class UniqueCodes
 
         if (empty($this->maxPrime)) {
             throw new RuntimeException('Max prime number must be specified');
-        }
-
-        if (floor($this->prime) != $this->prime) {
-            throw new RuntimeException('Prime number must be an integer');
-        }
-
-        if (floor($this->maxPrime) != $this->maxPrime) {
-            throw new RuntimeException('Max prime number must be an integer');
-        }
-
-        if (floor($start) != $start) {
-            throw new RuntimeException('Start must be an integer');
-        }
-
-        if (floor($amount) != $amount) {
-            throw new RuntimeException('Amount must be an integer');
         }
 
         if (empty($this->characters)) {

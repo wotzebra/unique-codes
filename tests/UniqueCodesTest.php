@@ -241,62 +241,6 @@ class UniqueCodesTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_exception_if_prime_is_not_an_integer()
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Prime number must be an integer');
-
-        (new UniqueCodes())
-            ->setPrime(17.1)
-            ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-            ->setLength(6)
-            ->generate(1, 100);
-    }
-
-    /** @test */
-    public function it_throws_exception_if_max_prime_is_not_an_integer()
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Max prime number must be an integer');
-
-        (new UniqueCodes())
-            ->setPrime(17)
-            ->setMaxPrime(101.1)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-            ->setLength(6)
-            ->generate(1, 100);
-    }
-
-    /** @test */
-    public function it_throws_exception_if_start_is_not_an_integer()
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Start must be an integer');
-
-        (new UniqueCodes())
-            ->setPrime(17)
-            ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-            ->setLength(6)
-            ->generate(1.1, 100);
-    }
-
-    /** @test */
-    public function it_throws_exception_if_amount_is_not_an_integer()
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Amount must be an integer');
-
-        (new UniqueCodes())
-            ->setPrime(17)
-            ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-            ->setLength(6)
-            ->generate(1, 100.1);
-    }
-
-    /** @test */
     public function it_throws_exception_if_characters_are_not_specified()
     {
         $this->expectException(RuntimeException::class);
