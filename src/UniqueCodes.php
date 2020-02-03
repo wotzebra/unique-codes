@@ -173,7 +173,7 @@ class UniqueCodes
      * @param int $amount
      * @param bool $toArray
      *
-     * @return array|\Generator<string>
+     * @return \Generator<string>|string[]
      */
     public function generate(int $start, int $amount = 1, bool $toArray = false)
     {
