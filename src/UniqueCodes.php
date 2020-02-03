@@ -303,14 +303,6 @@ class UniqueCodes
             throw new RuntimeException('Prime number must be smaller than the max prime number');
         }
 
-        if (! $this->isPrime($this->prime)) {
-            throw new RuntimeException('Prime number must be prime');
-        }
-
-        if (! $this->isPrime($this->maxPrime)) {
-            throw new RuntimeException('Max prime number must be prime');
-        }
-
         if (strlen($this->characters) <= $this->length) {
             throw new RuntimeException(
                 'The size of the character list must be bigger or equal to the length of the code'
@@ -323,7 +315,7 @@ class UniqueCodes
 
         if ($this->getMaximumUniqueCodes() <= $this->maxPrime) {
             throw new RuntimeException(
-                'The length of the code is too short to create the number of unique codes equal to the max prime number'
+                'The length of the code is too short or the character list is too small to create the number of unique codes equal to the max prime number'
             );
         }
 
@@ -348,33 +340,5 @@ class UniqueCodes
         }
 
         return $maxCombinations;
-    }
-
-    /**
-     * Check if number is prime.
-     *
-     * @param float $number
-     *
-     * @return void
-     */
-    public function isPrime(float $number)
-    {
-        if ($number == 1) {
-            return false;
-        }
-
-        if ($number == 2) {
-            return true;
-        }
-
-        $x = floor(sqrt($number));
-
-        for ($i = 2; $i <= $x; $i++) {
-            if ($number % $i == 0) {
-                break;
-            }
-        }
-
-        return $x == $i - 1;
     }
 }
