@@ -2,6 +2,7 @@
 
 namespace NextApps\UniqueCodes\Tests;
 
+use Generator;
 use NextApps\UniqueCodes\UniqueCodes;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -9,7 +10,7 @@ use RuntimeException;
 class UniqueCodesTest extends TestCase
 {
     /** @test */
-    public function it_generates_unique_codes()
+    public function it_returns_generator_by_default()
     {
         $codes = (new UniqueCodes())
             ->setPrime(17)
@@ -17,6 +18,34 @@ class UniqueCodesTest extends TestCase
             ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
             ->setLength(6)
             ->generate(1, 100);
+
+        $this->assertInstanceOf(Generator::class, $codes);
+    }
+
+    /** @test */
+    public function it_returns_array_if_requested()
+    {
+        $codes = (new UniqueCodes())
+            ->setPrime(17)
+            ->setMaxPrime(101)
+            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+            ->setLength(6)
+            ->generate(1, 100, true);
+
+        $this->assertIsArray($codes);
+    }
+
+    /** @test */
+    public function it_generates_unique_codes()
+    {
+        $codes = iterator_to_array(
+            (new UniqueCodes())
+                ->setPrime(17)
+                ->setMaxPrime(101)
+                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+                ->setLength(6)
+                ->generate(1, 100)
+        );
 
         $this->assertCount(100, $codes);
         $this->assertCount(100, array_unique($codes));
@@ -25,12 +54,14 @@ class UniqueCodesTest extends TestCase
     /** @test */
     public function it_generates_unique_codes_within_range()
     {
-        $codes = (new UniqueCodes())
-            ->setPrime(17)
-            ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-            ->setLength(6)
-            ->generate(25, 50);
+        $codes = iterator_to_array(
+            (new UniqueCodes())
+                ->setPrime(17)
+                ->setMaxPrime(101)
+                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+                ->setLength(6)
+                ->generate(25, 50)
+        );
 
         $this->assertCount(50, $codes);
         $this->assertCount(50, array_unique($codes));
@@ -39,12 +70,14 @@ class UniqueCodesTest extends TestCase
     /** @test */
     public function it_generates_codes_without_duplicate_characters()
     {
-        $codes = (new UniqueCodes())
-            ->setPrime(17)
-            ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-            ->setLength(6)
-            ->generate(1, 100);
+        $codes = iterator_to_array(
+            (new UniqueCodes())
+                ->setPrime(17)
+                ->setMaxPrime(101)
+                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+                ->setLength(6)
+                ->generate(1, 100)
+        );
 
         foreach ($codes as $code) {
             $this->assertEquals(6, strlen($code));
@@ -55,12 +88,14 @@ class UniqueCodesTest extends TestCase
     /** @test */
     public function it_generates_codes_that_only_contain_characters_from_specified_character_list()
     {
-        $codes = (new UniqueCodes())
-            ->setPrime(17)
-            ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4 WDPT69S7XRGANY23VBH58F1')
-            ->setLength(6)
-            ->generate(1, 100);
+        $codes = iterator_to_array(
+            (new UniqueCodes())
+                ->setPrime(17)
+                ->setMaxPrime(101)
+                ->setCharacters('LQJCKZM4 WDPT69S7XRGANY23VBH58F1')
+                ->setLength(6)
+                ->generate(1, 100)
+        );
 
         foreach ($codes as $code) {
             $this->assertEquals(6, strlen($code));
@@ -71,13 +106,15 @@ class UniqueCodesTest extends TestCase
     /** @test */
     public function it_generates_codes_with_prefix()
     {
-        $codes = (new UniqueCodes())
-            ->setPrime(17)
-            ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-            ->setLength(6)
-            ->setPrefix('TEST')
-            ->generate(1, 100);
+        $codes = iterator_to_array(
+            (new UniqueCodes())
+                ->setPrime(17)
+                ->setMaxPrime(101)
+                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+                ->setLength(6)
+                ->setPrefix('TEST')
+                ->generate(1, 100)
+        );
 
         $this->assertCount(100, array_unique($codes));
 
@@ -90,13 +127,15 @@ class UniqueCodesTest extends TestCase
     /** @test */
     public function it_generates_codes_with_suffix()
     {
-        $codes = (new UniqueCodes())
-            ->setPrime(17)
-            ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-            ->setLength(6)
-            ->setSuffix('TEST')
-            ->generate(1, 100);
+        $codes = iterator_to_array(
+            (new UniqueCodes())
+                ->setPrime(17)
+                ->setMaxPrime(101)
+                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+                ->setLength(6)
+                ->setSuffix('TEST')
+                ->generate(1, 100)
+        );
 
         $this->assertCount(100, array_unique($codes));
 
@@ -109,14 +148,16 @@ class UniqueCodesTest extends TestCase
     /** @test */
     public function it_generates_codes_with_prefix_and_suffix()
     {
-        $codes = (new UniqueCodes())
-            ->setPrime(17)
-            ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-            ->setLength(6)
-            ->setPrefix('PREFIX')
-            ->setSuffix('SUFFIX')
-            ->generate(1, 100);
+        $codes = iterator_to_array(
+            (new UniqueCodes())
+                ->setPrime(17)
+                ->setMaxPrime(101)
+                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+                ->setLength(6)
+                ->setPrefix('PREFIX')
+                ->setSuffix('SUFFIX')
+                ->generate(1, 100)
+        );
 
         $this->assertCount(100, array_unique($codes));
 
@@ -130,13 +171,15 @@ class UniqueCodesTest extends TestCase
     /** @test */
     public function it_generates_codes_with_delimiter()
     {
-        $codes = (new UniqueCodes())
-            ->setPrime(17)
-            ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-            ->setLength(6)
-            ->setDelimiter('-', 3)
-            ->generate(1, 100);
+        $codes = iterator_to_array(
+            (new UniqueCodes())
+                ->setPrime(17)
+                ->setMaxPrime(101)
+                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+                ->setLength(6)
+                ->setDelimiter('-', 3)
+                ->generate(1, 100)
+        );
 
         $this->assertCount(100, array_unique($codes));
 
@@ -149,15 +192,17 @@ class UniqueCodesTest extends TestCase
     /** @test */
     public function it_generates_codes_with_suffix_and_prefix_and_delimiter()
     {
-        $codes = (new UniqueCodes())
-            ->setPrime(17)
-            ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-            ->setLength(6)
-            ->setPrefix('PREFIX')
-            ->setSuffix('SUFFIX')
-            ->setDelimiter('-', 3)
-            ->generate(1, 100);
+        $codes = iterator_to_array(
+            (new UniqueCodes())
+                ->setPrime(17)
+                ->setMaxPrime(101)
+                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+                ->setLength(6)
+                ->setPrefix('PREFIX')
+                ->setSuffix('SUFFIX')
+                ->setDelimiter('-', 3)
+                ->generate(1, 100)
+        );
 
         $this->assertCount(100, array_unique($codes));
 

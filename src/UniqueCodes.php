@@ -171,25 +171,24 @@ class UniqueCodes
      *
      * @param float $start
      * @param float $amount
+     * @param bool $toArray
      *
-     * @return array
+     * @return array|\Generator<string>
      */
-    public function generate(float $start, float $amount = 1)
+    public function generate(float $start, float $amount = 1, bool $toArray = false)
     {
         $this->validateInput($start, $amount);
 
-        $codes = [];
+        $generator = (function () use ($start, $amount) {
+            for ($i = $start; $i < $start + $amount; $i++) {
+                $number = $this->obfuscateNumber($i);
+                $string = $this->encodeNumber($number);
 
-        $end = $start + $amount;
+                yield $this->constructCode($string);
+            }
+        })();
 
-        for ($i = $start; $i < $end; $i++) {
-            $number = $this->mapNumber($i);
-            $string = $this->encodeNumber($number);
-
-            $codes[] = $this->constructCode($string);
-        }
-
-        return $codes;
+        return $toArray ? iterator_to_array($generator) : $generator;
     }
 
     /**
@@ -199,7 +198,7 @@ class UniqueCodes
      *
      * @return float
      */
-    protected function mapNumber(float $number)
+    protected function obfuscateNumber(float $number)
     {
         return ($number * $this->prime) % $this->maxPrime;
     }
