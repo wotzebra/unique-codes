@@ -6,6 +6,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/nextapps/unique-codes.svg?style=flat-square)](https://packagist.org/packages/nextapps/unique-codes)
 
 This package generates unique, random-looking codes. These codes can be used for vouchers, coupons, ...
+You can now generate thousands or millions of codes without having to check if a code has already been generated in the past.
 
 ``` php
 use NextApps\UniqueCodes\UniqueCodes;
