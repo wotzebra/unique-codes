@@ -3,6 +3,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/nextapps/unique-codes.svg?style=flat-square)](https://packagist.org/packages/nextapps/unique-codes)
 [![Build Status](https://img.shields.io/travis/nextapps-be/unique-codes/master.svg?style=flat-square)](https://travis-ci.org/nextapps-be/unique-codes)
 [![Quality Score](https://img.shields.io/scrutinizer/g/nextapps-be/unique-codes.svg?style=flat-square)](https://scrutinizer-ci.com/g/nextapps-be/unique-codes)
+[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/nextapps-be/unique-codes?style=flat-square)](https://scrutinizer-ci.com/g/nextapps-be/unique-codes)
 [![Total Downloads](https://img.shields.io/packagist/dt/nextapps/unique-codes.svg?style=flat-square)](https://packagist.org/packages/nextapps/unique-codes)
 
 This package generates unique, random-looking codes. These codes can be used for vouchers, coupons, ...
