@@ -39,10 +39,10 @@ To generate unique codes, you provide a start and end number. It will generate c
 If a lot of codes need to be generated at the same time, it can cause a lot of memory usage. In order to prevent this, a [Generator](https://www.php.net/manual/en/class.generator.php) is returned by default. If you want an array instead, you can set the third parameter of the `generate` method to `true`.
 
 ```php
-// Returns Generator to create 100 codes.
+// Returns generator to create codes for numbers 1 to 100.
 ->generate(1, 100);
 
-// Returns array with 100 created codes.
+// Returns array with created codes for numbers 1 to 100.
 ->generate(1, 100, true);
 ```
 
