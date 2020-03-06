@@ -60,11 +60,27 @@ class UniqueCodesTest extends TestCase
                 ->setMaxPrime(101)
                 ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
                 ->setLength(6)
-                ->generate(25, 50)
+                ->generate(25, 75)
         );
 
-        $this->assertCount(50, $codes);
-        $this->assertCount(50, array_unique($codes));
+        $this->assertCount(51, $codes);
+        $this->assertCount(51, array_unique($codes));
+    }
+
+    /** @test */
+    public function it_generates_one_unique_code()
+    {
+        $codes = iterator_to_array(
+            (new UniqueCodes())
+                ->setPrime(17)
+                ->setMaxPrime(101)
+                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+                ->setLength(6)
+                ->generate(25, 25)
+        );
+
+        $this->assertCount(1, $codes);
+        $this->assertCount(1, array_unique($codes));
     }
 
     /** @test */
@@ -351,10 +367,10 @@ class UniqueCodesTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_exception_if_sum_of_start_and_amount_is_bigger_than_max_prime_number()
+    public function it_throws_exception_if_end_is_bigger_than_max_prime_number()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('The number of codes you create can not be bigger or equal to the max prime number');
+        $this->expectExceptionMessage('The end number can not be bigger or equal to the max prime number');
 
         (new UniqueCodes())
             ->setPrime(17)
@@ -365,16 +381,16 @@ class UniqueCodesTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_exception_if_sum_of_start_and_amount_equals_max_prime_number()
+    public function it_throws_exception_if_ennd_equals_max_prime_number()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('The number of codes you create can not be bigger or equal to the max prime number');
+        $this->expectExceptionMessage('The end number can not be bigger or equal to the max prime number');
 
         (new UniqueCodes())
             ->setPrime(17)
             ->setMaxPrime(101)
             ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
             ->setLength(6)
-            ->generate(50, 52);
+            ->generate(50, 101);
     }
 }

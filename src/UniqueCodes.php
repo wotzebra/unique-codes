@@ -170,17 +170,17 @@ class UniqueCodes
      * Generate the necessary amount of codes.
      *
      * @param int $start
-     * @param int $amount
+     * @param int $end
      * @param bool $toArray
      *
      * @return \Generator<string>|string[]
      */
-    public function generate(int $start, int $amount = 1, bool $toArray = false)
+    public function generate(int $start, int $end, bool $toArray = false)
     {
-        $this->validateInput($start, $amount);
+        $this->validateInput($start, $end);
 
-        $generator = (function () use ($start, $amount) {
-            for ($i = $start; $i < $start + $amount; $i++) {
+        $generator = (function () use ($start, $end) {
+            for ($i = $start; $i <= $end; $i++) {
                 $number = $this->obfuscateNumber($i);
                 $string = $this->encodeNumber($number);
 
@@ -259,13 +259,13 @@ class UniqueCodes
      * Check if all property values are valid.
      *
      * @param int $start
-     * @param int $amount
+     * @param int $end
      *
      * @throws \RuntimeException
      *
      * @return void
      */
-    protected function validateInput(int $start, int $amount = 1)
+    protected function validateInput(int $start, int $end)
     {
         if (empty($this->prime)) {
             throw new RuntimeException('Prime number must be specified');
@@ -303,10 +303,12 @@ class UniqueCodes
             );
         }
 
-        if (($start + $amount - 1) >= $this->maxPrime) {
-            throw new RuntimeException(
-                'The number of codes you create can not be bigger or equal to the max prime number'
-            );
+        if ($start <= 0) {
+            throw new RuntimeException('The start number must be bigger than zero');
+        }
+
+        if ($end >= $this->maxPrime) {
+            throw new RuntimeException('The end number can not be bigger or equal to the max prime number');
         }
     }
 

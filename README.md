@@ -19,7 +19,7 @@ $codes = (new UniqueCodes())
     ->setLength(6)
     ->generate(1, 100);
 
-// Result: LQJCKZ, HYW4LQ, Y9GXLQ, ...
+// Result: LQJCKZ (1), HYW4LQ (2), Y9GXLQ (3), ... , 9HKV4L (100)
 ```
 
 ## Installation
@@ -34,7 +34,7 @@ composer require nextapps/unique-codes
 
 ### Generate() method
 
-To generate unique codes, you provide a start number and an amount. It will generate codes using the numbers in that range. Each number will always generate the same unique, random-looking code. This means you should ensure you never use the same numbers again. This could be achieved by saving which number ranges you already used or by always using the next auto-incrementing id in your codes database table.
+To generate unique codes, you provide a start and end number. It will generate codes using the numbers in that range. Each number will always generate the same unique, random-looking code. This means you should ensure you never use the same numbers again. This could be achieved by saving which number ranges you already used or by always using the next auto-incrementing id in your codes database table.
 
 If a lot of codes need to be generated at the same time, it can cause a lot of memory usage. In order to prevent this, a [Generator](https://www.php.net/manual/en/class.generator.php) is returned by default. If you want an array instead, you can set the third parameter of the `generate` method to `true`.
 
