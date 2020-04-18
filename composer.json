@@ -1,6 +1,6 @@
 {
     "name": "nextapps/unique-codes",
-    "description": "Create unique, random-looking codes",
+    "description": "Generate unique, random-looking codes",
     "keywords": [
         "nextapps",
         "unique-codes",
@@ -14,6 +14,12 @@
         {
             "name": "Günther Debrauwer",
             "email": "gunther@nextapps.be",
+            "homepage": "https://nextapps.be",
+            "role": "Developer"
+        },
+        {
+            "name": "Evert Arnould",
+            "email": "evert@nextapps.be",
             "homepage": "https://nextapps.be",
             "role": "Developer"
         }
