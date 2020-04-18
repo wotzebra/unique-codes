@@ -23,28 +23,28 @@ class UniqueCodes
     /**
      * The suffix that will be added to every code.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $suffix;
 
     /**
      * The prefix that will be added to every code.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $prefix;
 
     /**
      * The delimiter that separates the different parts of the generated code.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $delimiter;
 
     /**
      * The size of every part of the generated code.
      *
-     * @var int|null
+     * @var null|int
      */
     protected $splitLength;
 
@@ -170,17 +170,17 @@ class UniqueCodes
      * Generate the necessary amount of codes.
      *
      * @param int $start
-     * @param int $end
+     * @param null|int $end
      * @param bool $toArray
      *
-     * @return \Generator<string>|string[]
+     * @return \Generator|array|string
      */
-    public function generate(int $start, int $end, bool $toArray = false)
+    public function generate(int $start, int $end = null, bool $toArray = false)
     {
         $this->validateInput($start, $end);
 
         $generator = (function () use ($start, $end) {
-            for ($i = $start; $i <= $end; $i++) {
+            for ($i = $start; $i <= ($end ?? $start); $i++) {
                 $number = $this->obfuscateNumber($i);
                 $string = $this->encodeNumber($number);
 
@@ -188,7 +188,15 @@ class UniqueCodes
             }
         })();
 
-        return $toArray ? iterator_to_array($generator) : $generator;
+        if ($end === null) {
+            return iterator_to_array($generator)[0];
+        }
+
+        if ($toArray) {
+            return iterator_to_array($generator);
+        }
+
+        return $generator;
     }
 
     /**
@@ -259,13 +267,13 @@ class UniqueCodes
      * Check if all property values are valid.
      *
      * @param int $start
-     * @param int $end
+     * @param null|int $end
      *
      * @throws \RuntimeException
      *
      * @return void
      */
-    protected function validateInput(int $start, int $end)
+    protected function validateInput(int $start, int $end = null)
     {
         if (empty($this->prime)) {
             throw new RuntimeException('Prime number must be specified');
@@ -307,7 +315,7 @@ class UniqueCodes
             throw new RuntimeException('The start number must be bigger than zero');
         }
 
-        if ($end >= $this->maxPrime) {
+        if ($end !== null && $end >= $this->maxPrime) {
             throw new RuntimeException('The end number can not be bigger or equal to the max prime number');
         }
     }

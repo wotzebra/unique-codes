@@ -36,6 +36,19 @@ class UniqueCodesTest extends TestCase
     }
 
     /** @test */
+    public function it_returns_string_if_no_end_provided()
+    {
+        $code = (new UniqueCodes())
+            ->setPrime(17)
+            ->setMaxPrime(101)
+            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+            ->setLength(6)
+            ->generate(100);
+
+        $this->assertIsString($code);
+    }
+
+    /** @test */
     public function it_generates_unique_codes()
     {
         $codes = iterator_to_array(

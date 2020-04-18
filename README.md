@@ -37,7 +37,7 @@ composer require nextapps/unique-codes
 
 To generate unique codes, you provide a start and end number. It will generate codes using the numbers in that range. Each number will always generate the same unique, random-looking code. This means you should ensure you never use the same numbers again. This could be achieved by saving which number ranges you already used or by always using the next auto-incrementing id in your codes database table.
 
-If a lot of codes need to be generated at the same time, it can cause a lot of memory usage. In order to prevent this, a [Generator](https://www.php.net/manual/en/class.generator.php) is returned by default. If you want an array instead, you can set the third parameter of the `generate` method to `true`.
+If a lot of codes need to be generated at the same time, it can cause a lot of memory usage. In order to prevent this, a [Generator](https://www.php.net/manual/en/class.generator.php) is returned by default. If you want an array instead, you can set the third parameter of the `generate` method to `true`. If you want to generate one code based on one number, you only have to set the first parameter of the `generate` method.
 
 ```php
 // Returns generator to create codes for numbers 1 to 100.
@@ -45,6 +45,9 @@ If a lot of codes need to be generated at the same time, it can cause a lot of m
 
 // Returns array with created codes for numbers 1 to 100.
 ->generate(1, 100, true);
+
+// Returns string with created code for number 100.
+->generate(100);
 ```
 
 ### Setters
