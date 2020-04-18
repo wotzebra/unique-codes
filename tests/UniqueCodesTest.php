@@ -121,14 +121,35 @@ class UniqueCodesTest extends TestCase
             (new UniqueCodes())
                 ->setPrime(17)
                 ->setMaxPrime(101)
-                ->setCharacters('LQJCKZM4 WDPT69S7XRGANY23VBH58F1')
+                ->setCharacters($characters = 'ABCDEFG')
                 ->setLength(6)
                 ->generate(1, 100)
         );
 
         foreach ($codes as $code) {
             $this->assertEquals(6, strlen($code));
+            $this->assertCount(0, array_diff(str_split($code), str_split($characters)));
+        }
+    }
+
+    /** @test */
+    public function it_generates_codes_with_character_list_array()
+    {
+        $codes = iterator_to_array(
+            (new UniqueCodes())
+                ->setPrime(17)
+                ->setMaxPrime(101)
+                ->setCharacters($characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G'])
+                ->setLength(6)
+                ->generate(1, 100)
+        );
+
+        $this->assertCount(100, array_unique($codes));
+
+        foreach ($codes as $code) {
+            $this->assertEquals(6, strlen($code));
             $this->assertCount(6, array_unique(str_split($code)));
+            $this->assertCount(0, array_diff(str_split($code), $characters));
         }
     }
 
@@ -380,6 +401,34 @@ class UniqueCodesTest extends TestCase
     }
 
     /** @test */
+    public function it_throws_exception_if_start_is_less_than_zero()
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The start number must be bigger than zero');
+
+        (new UniqueCodes())
+            ->setPrime(17)
+            ->setMaxPrime(101)
+            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+            ->setLength(6)
+            ->generate(-1, 100);
+    }
+
+    /** @test */
+    public function it_throws_exception_if_start_equals_zero()
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The start number must be bigger than zero');
+
+        (new UniqueCodes())
+            ->setPrime(17)
+            ->setMaxPrime(101)
+            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+            ->setLength(6)
+            ->generate(0, 100);
+    }
+
+    /** @test */
     public function it_throws_exception_if_end_is_bigger_than_max_prime_number()
     {
         $this->expectException(RuntimeException::class);
@@ -394,7 +443,7 @@ class UniqueCodesTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_exception_if_ennd_equals_max_prime_number()
+    public function it_throws_exception_if_end_equals_max_prime_number()
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The end number can not be bigger or equal to the max prime number');
