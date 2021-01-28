@@ -121,24 +121,6 @@ class UniqueCodesTest extends TestCase
     }
 
     /** @test */
-    public function it_generates_codes_without_duplicate_characters()
-    {
-        $codes = iterator_to_array(
-            (new UniqueCodes())
-                ->setPrime(17)
-                ->setMaxPrime(101)
-                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-                ->setLength(6)
-                ->generate(1, 100)
-        );
-
-        foreach ($codes as $code) {
-            $this->assertEquals(6, strlen($code));
-            $this->assertCount(6, array_unique(str_split($code)));
-        }
-    }
-
-    /** @test */
     public function it_generates_codes_that_only_contain_characters_from_specified_character_list()
     {
         $codes = iterator_to_array(
@@ -172,7 +154,6 @@ class UniqueCodesTest extends TestCase
 
         foreach ($codes as $code) {
             $this->assertEquals(6, strlen($code));
-            $this->assertCount(6, array_unique(str_split($code)));
             $this->assertCount(0, array_diff(str_split($code), $characters));
         }
     }

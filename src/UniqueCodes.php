@@ -227,7 +227,6 @@ class UniqueCodes
             $digit = $number % strlen($characters);
 
             $string .= $characters[$digit];
-            $characters = strtr($characters, [$characters[$digit] => '']);
 
             $number = $number / strlen($characters);
         }
