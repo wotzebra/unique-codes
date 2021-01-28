@@ -63,6 +63,13 @@ class UniqueCodes
     protected $length;
 
     /**
+     * The maximum amount of duplicate characters in each code.
+     *
+     * @var int
+     */
+    protected $maxDuplicateCharacters = null;
+
+    /**
      * Set the prime number.
      *
      * @param int $prime
@@ -167,6 +174,20 @@ class UniqueCodes
     }
 
     /**
+     * Set the max duplicate characters.
+     *
+     * @param int $maxDuplicateCharacters
+     *
+     * @return self
+     */
+    public function setMaxDuplicateCharacters(int $maxDuplicateCharacters)
+    {
+        $this->maxDuplicateCharacters = $maxDuplicateCharacters;
+
+        return $this;
+    }
+
+    /**
      * Generate the necessary amount of codes.
      *
      * @param int $start
@@ -184,7 +205,23 @@ class UniqueCodes
                 $number = $this->obfuscateNumber($i);
                 $string = $this->encodeNumber($number);
 
-                yield $this->constructCode($string);
+                // 6-2
+                // 4
+                // var_dump(count(array_unique(str_split($string))),$this->length - count(array_unique(str_split($string))), $string);
+                // die();
+
+
+                // var_dump($string, count(array_unique(str_split($string))) > $this->maxDuplicateCharacters);
+                // // die();
+                // if (count(array_unique(str_split($string))) > $this->maxDuplicateCharacters) {
+                //     yield new UniqueCode($number, $this->constructCode($string));
+                // }
+
+                // continue;
+
+                // var_dump($this->length - count(array_unique(str_split($string))) + 1, $string, $this->maxDuplicateCharacters);
+                // die();
+                yield ($this->length - count(array_unique(str_split($string))) + 1) <= $this->maxDuplicateCharacters ? new UniqueCode($number, $this->constructCode($string)) : null;
             }
         })();
 
