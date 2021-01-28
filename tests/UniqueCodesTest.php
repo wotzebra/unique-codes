@@ -74,6 +74,18 @@ class UniqueCodesTest extends TestCase
 
         $this->assertCount(98892, $codes);
         $this->assertCount(98892, array_unique($codes));
+
+        $codes = iterator_to_array(
+            (new UniqueCodes())
+                ->setPrime(13)
+                ->setMaxPrime(113)
+                ->setCharacters('ABCDE')
+                ->setLength(4)
+                ->generate(1, 112)
+        );
+
+        $this->assertCount(112, $codes);
+        $this->assertCount(112, array_unique($codes));
     }
 
     /** @test */
