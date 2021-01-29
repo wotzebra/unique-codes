@@ -18,7 +18,7 @@ $codes = (new UniqueCodes())
     ->setLength(6)
     ->generate(1, 100);
 
-// Result: LQJCKZ (1), HYW4LQ (2), Y9GXLQ (3), ... , 9HKV4L (100)
+// Result: H2ZMLL (1), YST6LL (2), XMRGLL (3), ... , 9ZCDKL (100)
 ```
 
 ## Installation
@@ -103,7 +103,7 @@ $obfuscatedNumber = ($inputNumber * $primeNumber) % $maxPrimeNumber
 
 #### Encoding the obfuscated number
 
-In the next step, the obfuscated number is encoded to string. This is just a base conversion using division and modulo. If a character has been added to the encoded string, then that character is removed from the available character list for that code. This ensures a code never contains duplicate characters.
+In the next step, the obfuscated number is encoded to string. This is just a base conversion using division and modulo.
 
 ## Testing
 
