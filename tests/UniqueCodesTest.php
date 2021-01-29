@@ -9,17 +9,61 @@ use RuntimeException;
 
 class UniqueCodesTest extends TestCase
 {
+    public function val($c)
+    {
+        if ($c >= '0' && $c <= '9') {
+            return ord($c) - ord('0');
+        } else {
+            return ord($c) - ord('A') + 10;
+        }
+    }
+
+    public function toDeci($str, $base)
+    {
+        $len = strlen($str);
+        $power = 1; // Initialize power of base
+    $num = 0; // Initialize result
+
+    // Decimal equivalent is str[len-1]*1 +
+        // str[len-2]*base + str[len-3]*(base^2) + ...
+        for ($i = $len - 1; $i >= 0; $i--) {
+            // A digit in input number must be
+            // less than number's base
+            if ($this->val($str[$i]) >= $base) {
+                echo 'Invalid Number';
+
+                return -1;
+            }
+
+            $num += $this->val($str[$i]) * $power;
+            $power = $power * $base;
+        }
+
+        return $num;
+    }
+
     /** @test */
     public function it_returns_generator_by_default()
     {
         $codes = (new UniqueCodes())
-            ->setPrime(17)
-            ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+            ->setPrime(101)
+            ->setMaxPrime(387420489)
+            // ->setPrime(49673194771)
+            // ->setMaxPrime(7544904083)
+            ->setCharacters($characters = 'ABCDDEF')
             ->setLength(6)
-            ->generate(1, 100);
+            ->generate(1, 100, true);
+        // die();
+        var_dump($codes);
+        var_dump($this->toDeci($codes[0], count(str_split($characters))));
+        die();
+        $this->assertCount(100, $codes);
+        $this->assertCount(100, array_unique($codes));
+        sort($codes);
+        $this->assertEquals(range(1, 100), $codes);
 
-        $this->assertInstanceOf(Generator::class, $codes);
+        // $this->assertInstanceOf(Generator::class, $codes);
+        die();
     }
 
     /** @test */

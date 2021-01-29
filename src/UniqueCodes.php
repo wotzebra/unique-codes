@@ -208,7 +208,16 @@ class UniqueCodes
      */
     protected function obfuscateNumber(int $number)
     {
-        return ($number * $this->prime) % $this->maxPrime;
+        // if ($number > 100) {
+        //     die();
+        // }
+        $obfuscatedNumber = ($number * $this->maxPrime) % $this->prime;
+
+        $originalNumber = ($obfuscatedNumber * 47) % $this->prime;
+
+        var_dump($number.' => '.$obfuscatedNumber.' => '.$originalNumber);
+
+        return $obfuscatedNumber;
     }
 
     /**
@@ -274,6 +283,7 @@ class UniqueCodes
      */
     protected function validateInput(int $start, int $end = null)
     {
+        return;
         if (empty($this->prime)) {
             throw new RuntimeException('Prime number must be specified');
         }
