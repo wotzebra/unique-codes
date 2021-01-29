@@ -44,13 +44,13 @@ class UniqueCode
         return $this->number;
     }
 
-     /**
+    /**
      * Get the generated code.
      *
      * @return string
      */
     public function getCode()
     {
-        return $this->number;
+        return $this->code;
     }
 }

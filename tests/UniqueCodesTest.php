@@ -3,6 +3,7 @@
 namespace NextApps\UniqueCodes\Tests;
 
 use Generator;
+use NextApps\UniqueCodes\UniqueCode;
 use NextApps\UniqueCodes\UniqueCodes;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -12,6 +13,62 @@ class UniqueCodesTest extends TestCase
     /** @test */
     public function it_returns_generator_by_default()
     {
+        // var_dump(count(array_unique(str_split('H2ZMLL'))));
+        // die();
+
+        $a = (new UniqueCodes())
+        ->setPrime(184259)
+        ->setMaxPrime(7230323)
+        ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+        ->setLength(6)
+        ->generate(1, 200000, true)
+        ->filter(function (UniqueCode $uniqueCode) {
+            return count(array_unique(str_split($uniqueCode->getCode()))) > 4; //183729 results
+            if (count(array_unique(str_split($uniqueCode->getCode()))) === 3) {
+                var_dump($uniqueCode->getCode());
+                die();
+            }
+        });
+
+        // 31*31*31*31*30*29
+
+        // 31*31*31*31*31*3
+
+        var_dump($a);
+        var_dump(count($a->all()));
+        die();
+        var_dump(($b = array_values($a->all()))[0]->getCode());
+        var_dump($b[1]->getCode());
+        var_dump($b[2]->getCode());
+        var_dump($b[3]->getCode());
+        var_dump($b[4]->getCode());
+        var_dump($b[5]->getCode());
+        var_dump($b[6]->getCode());
+        var_dump($b[7]->getCode());
+        var_dump($b[8]->getCode());
+        var_dump($b[9]->getCode());
+        var_dump($b[10]->getCode());
+        var_dump($b[11]->getCode());
+        var_dump($b[12]->getCode());
+        die();
+        // ["number":protected]=>
+        // int(1901614)
+        // ["code":protected]=>
+        // string(6) "WQL44C"
+
+        var_dump(count($a));
+        var_dump(count(array_values(array_unique($a))));
+
+        foreach ($a as $index => $item) {
+            var_dump($item);
+            if ($index > 50000) {
+                die();
+            }
+        }
+
+        var_dump($a[0], $a[1], $a[2], $a[3]);
+        die();
+
         $codes = (new UniqueCodes())
             ->setPrime(17)
             ->setMaxPrime(101)
@@ -20,7 +77,7 @@ class UniqueCodesTest extends TestCase
             ->setMaxDuplicateCharacters(4)
             ->generate(1, 100, true);
 
-            var_dump(count($codes));
+        var_dump(count($codes));
 
         var_dump($codes);
         var_dump(count(array_filter($codes)));
@@ -28,7 +85,7 @@ class UniqueCodesTest extends TestCase
         // $this->assertInstanceOf(Generator::class, $codes);
     }
 
-    /** @test */
+    /* @test */
     // public function it_returns_array_if_requested()
     // {
     //     $codes = (new UniqueCodes())

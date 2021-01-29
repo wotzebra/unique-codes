@@ -194,13 +194,13 @@ class UniqueCodes
      * @param null|int $end
      * @param bool $toArray
      *
-     * @return \Generator|array|string
+     * @return \NextApps\UniqueCodes\UniqueCodeCollection
      */
     public function generate(int $start, int $end = null, bool $toArray = false)
     {
         $this->validateInput($start, $end);
 
-        $generator = (function () use ($start, $end) {
+        return new UniqueCodeCollection(function () use ($start, $end) {
             for ($i = $start; $i <= ($end ?? $start); $i++) {
                 $number = $this->obfuscateNumber($i);
                 $string = $this->encodeNumber($number);
@@ -209,7 +209,6 @@ class UniqueCodes
                 // 4
                 // var_dump(count(array_unique(str_split($string))),$this->length - count(array_unique(str_split($string))), $string);
                 // die();
-
 
                 // var_dump($string, count(array_unique(str_split($string))) > $this->maxDuplicateCharacters);
                 // // die();
@@ -221,9 +220,11 @@ class UniqueCodes
 
                 // var_dump($this->length - count(array_unique(str_split($string))) + 1, $string, $this->maxDuplicateCharacters);
                 // die();
-                yield ($this->length - count(array_unique(str_split($string))) + 1) <= $this->maxDuplicateCharacters ? new UniqueCode($number, $this->constructCode($string)) : null;
+                yield new UniqueCode($number, $this->constructCode($string));
+
+                // yield ($this->length - count(array_unique(str_split($string))) + 1) <= $this->maxDuplicateCharacters ? new UniqueCode($number, $this->constructCode($string)) : null;
             }
-        })();
+        });
 
         if ($end === null) {
             return iterator_to_array($generator)[0];
