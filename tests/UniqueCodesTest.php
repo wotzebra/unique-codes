@@ -21,14 +21,15 @@ class UniqueCodesTest extends TestCase
         ->setMaxPrime(7230323)
         ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
         ->setLength(6)
-        ->generate(1, 200000, true)
-        ->filter(function (UniqueCode $uniqueCode) {
-            return count(array_unique(str_split($uniqueCode->getCode()))) > 4; //183729 results
-            if (count(array_unique(str_split($uniqueCode->getCode()))) === 3) {
-                var_dump($uniqueCode->getCode());
-                die();
-            }
-        });
+        ->setMinDifferentCharacters(5)
+        ->generate(1, 200000, true);
+        // ->filter(function (UniqueCode $uniqueCode) {
+        //     return count(array_unique(str_split($uniqueCode->getCode()))) > 4; //183729 results
+        //     if (count(array_unique(str_split($uniqueCode->getCode()))) === 3) {
+        //         var_dump($uniqueCode->getCode());
+        //         die();
+        //     }
+        // });
 
         // 31*31*31*31*30*29
 
@@ -36,7 +37,7 @@ class UniqueCodesTest extends TestCase
 
         var_dump($a);
         var_dump(count($a->all()));
-        die();
+        // die();
         var_dump(($b = array_values($a->all()))[0]->getCode());
         var_dump($b[1]->getCode());
         var_dump($b[2]->getCode());

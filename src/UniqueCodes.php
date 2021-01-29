@@ -63,11 +63,11 @@ class UniqueCodes
     protected $length;
 
     /**
-     * The maximum amount of duplicate characters in each code.
+     * The minimum amount of differenet characters in each code.
      *
      * @var int
      */
-    protected $maxDuplicateCharacters = null;
+    protected $minDifferentCharacters = null;
 
     /**
      * Set the prime number.
@@ -176,13 +176,13 @@ class UniqueCodes
     /**
      * Set the max duplicate characters.
      *
-     * @param int $maxDuplicateCharacters
+     * @param int $minDifferentCharacters
      *
      * @return self
      */
-    public function setMaxDuplicateCharacters(int $maxDuplicateCharacters)
+    public function setMinDifferentCharacters(int $minDifferentCharacters)
     {
-        $this->maxDuplicateCharacters = $maxDuplicateCharacters;
+        $this->minDifferentCharacters = $minDifferentCharacters;
 
         return $this;
     }
@@ -191,50 +191,37 @@ class UniqueCodes
      * Generate the necessary amount of codes.
      *
      * @param int $start
-     * @param null|int $end
+     * @param int $amount
      * @param bool $toArray
      *
      * @return \NextApps\UniqueCodes\UniqueCodeCollection
      */
-    public function generate(int $start, int $end = null, bool $toArray = false)
+    public function generate(int $start, int $amount, bool $toArray = false)
     {
-        $this->validateInput($start, $end);
+        $this->validateInput($start, $amount);
 
-        return new UniqueCodeCollection(function () use ($start, $end) {
-            for ($i = $start; $i <= ($end ?? $start); $i++) {
+        return new UniqueCodeCollection(function () use ($start, $amount) {
+            $count = 0;
+            $i = $start;
+
+            while ($count < $amount) {
                 $number = $this->obfuscateNumber($i);
                 $string = $this->encodeNumber($number);
+                $code = $this->constructCode($string);
 
-                // 6-2
-                // 4
-                // var_dump(count(array_unique(str_split($string))),$this->length - count(array_unique(str_split($string))), $string);
+                $i++;
+
+                if (count(array_unique(str_split($code))) > $this->minDifferentCharacters) {
+                    $count++;
+
+                    yield new UniqueCode($number, $code);
+                }
+
+                // var_dump($code);
+                // var_dump('gezever!!!!');
                 // die();
-
-                // var_dump($string, count(array_unique(str_split($string))) > $this->maxDuplicateCharacters);
-                // // die();
-                // if (count(array_unique(str_split($string))) > $this->maxDuplicateCharacters) {
-                //     yield new UniqueCode($number, $this->constructCode($string));
-                // }
-
-                // continue;
-
-                // var_dump($this->length - count(array_unique(str_split($string))) + 1, $string, $this->maxDuplicateCharacters);
-                // die();
-                yield new UniqueCode($number, $this->constructCode($string));
-
-                // yield ($this->length - count(array_unique(str_split($string))) + 1) <= $this->maxDuplicateCharacters ? new UniqueCode($number, $this->constructCode($string)) : null;
             }
         });
-
-        if ($end === null) {
-            return iterator_to_array($generator)[0];
-        }
-
-        if ($toArray) {
-            return iterator_to_array($generator);
-        }
-
-        return $generator;
     }
 
     /**
@@ -304,13 +291,13 @@ class UniqueCodes
      * Check if all property values are valid.
      *
      * @param int $start
-     * @param null|int $end
+     * @param int $amount
      *
      * @throws \RuntimeException
      *
      * @return void
      */
-    protected function validateInput(int $start, int $end = null)
+    protected function validateInput(int $start, int $amount)
     {
         if (empty($this->prime)) {
             throw new RuntimeException('Prime number must be specified');
@@ -352,8 +339,8 @@ class UniqueCodes
             throw new RuntimeException('The start number must be bigger than zero');
         }
 
-        if ($end !== null && $end >= $this->maxPrime) {
-            throw new RuntimeException('The end number can not be bigger or equal to the max prime number');
+        if ($start + $amount >= $this->maxPrime) {
+            throw new RuntimeException('The largest end number (based on start and amount) can not be bigger or equal to the max prime number');
         }
     }
 
