@@ -227,7 +227,6 @@ class UniqueCodes
             $digit = $number % strlen($characters);
 
             $string .= $characters[$digit];
-            $characters = strtr($characters, [$characters[$digit] => '']);
 
             $number = $number / strlen($characters);
         }
@@ -327,12 +326,6 @@ class UniqueCodes
      */
     protected function getMaximumUniqueCodes()
     {
-        $maxCombinations = 1;
-
-        for ($i = 0; $i < $this->length; $i++) {
-            $maxCombinations = $maxCombinations * (strlen($this->characters) - $i);
-        }
-
-        return $maxCombinations;
+        return pow(strlen($this->characters), $this->length);
     }
 }

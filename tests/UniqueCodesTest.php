@@ -74,6 +74,18 @@ class UniqueCodesTest extends TestCase
 
         $this->assertCount(98892, $codes);
         $this->assertCount(98892, array_unique($codes));
+
+        $codes = iterator_to_array(
+            (new UniqueCodes())
+                ->setPrime(13)
+                ->setMaxPrime(113)
+                ->setCharacters('ABCDE')
+                ->setLength(4)
+                ->generate(1, 112)
+        );
+
+        $this->assertCount(112, $codes);
+        $this->assertCount(112, array_unique($codes));
     }
 
     /** @test */
@@ -106,24 +118,6 @@ class UniqueCodesTest extends TestCase
 
         $this->assertCount(1, $codes);
         $this->assertCount(1, array_unique($codes));
-    }
-
-    /** @test */
-    public function it_generates_codes_without_duplicate_characters()
-    {
-        $codes = iterator_to_array(
-            (new UniqueCodes())
-                ->setPrime(17)
-                ->setMaxPrime(101)
-                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-                ->setLength(6)
-                ->generate(1, 100)
-        );
-
-        foreach ($codes as $code) {
-            $this->assertEquals(6, strlen($code));
-            $this->assertCount(6, array_unique(str_split($code)));
-        }
     }
 
     /** @test */
@@ -160,7 +154,6 @@ class UniqueCodesTest extends TestCase
 
         foreach ($codes as $code) {
             $this->assertEquals(6, strlen($code));
-            $this->assertCount(6, array_unique(str_split($code)));
             $this->assertCount(0, array_diff(str_split($code), $characters));
         }
     }
