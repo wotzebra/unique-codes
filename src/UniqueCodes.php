@@ -11,7 +11,7 @@ class UniqueCodes
      *
      * @var int
      */
-    protected $prime;
+    protected $obfuscatingPrime;
 
     /**
      * The prime number that is one larger than the maximum number that can be converted to a code.
@@ -63,15 +63,15 @@ class UniqueCodes
     protected $length;
 
     /**
-     * Set the prime number.
+     * Set the obfuscating prime number.
      *
      * @param int $prime
      *
      * @return self
      */
-    public function setPrime(int $prime)
+    public function setObfuscatingPrime(int $obfuscatingPrime)
     {
-        $this->prime = $prime;
+        $this->obfuscatingPrime = $obfuscatingPrime;
 
         return $this;
     }
@@ -208,7 +208,7 @@ class UniqueCodes
      */
     protected function obfuscateNumber(int $number)
     {
-        return ($number * $this->prime) % $this->maxPrime;
+        return ($number * $this->obfuscatingPrime) % $this->maxPrime;
     }
 
     /**
@@ -226,10 +226,17 @@ class UniqueCodes
         for ($i = 0; $i < $this->length; $i++) {
             $digit = $number % strlen($characters);
 
-            $string .= $characters[$digit];
+            $string = $characters[$digit] . $string;
 
             $number = $number / strlen($characters);
         }
+
+    //     $to_len = strlen($to_alphabet);
+    // $result = '';
+    // while ($base10_value != '0') {
+    //     $result = $to_base_chars[bcmod($base10_value, $to_len)] . $result;
+    //     $base10_value = bcdiv($base10_value, $to_len, 0);
+    // }
 
         return $string;
     }
@@ -274,7 +281,7 @@ class UniqueCodes
      */
     protected function validateInput(int $start, int $end = null)
     {
-        if (empty($this->prime)) {
+        if (empty($this->obfuscatingPrime)) {
             throw new RuntimeException('Prime number must be specified');
         }
 
@@ -290,9 +297,9 @@ class UniqueCodes
             throw new RuntimeException('Length must be specified');
         }
 
-        if ($this->prime >= $this->maxPrime) {
-            throw new RuntimeException('Prime number must be smaller than the max prime number');
-        }
+        // if ($this->prime >= $this->maxPrime) {
+        //     throw new RuntimeException('Prime number must be smaller than the max prime number');
+        // }
 
         if (strlen($this->characters) <= $this->length) {
             throw new RuntimeException(
