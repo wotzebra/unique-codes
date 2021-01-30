@@ -282,7 +282,7 @@ class UniqueCodes
     protected function validateInput(int $start, int $end = null)
     {
         if (empty($this->obfuscatingPrime)) {
-            throw new RuntimeException('Prime number must be specified');
+            throw new RuntimeException('Obfuscating prime number must be specified');
         }
 
         if (empty($this->maxPrime)) {
@@ -297,14 +297,8 @@ class UniqueCodes
             throw new RuntimeException('Length must be specified');
         }
 
-        // if ($this->prime >= $this->maxPrime) {
-        //     throw new RuntimeException('Prime number must be smaller than the max prime number');
-        // }
-
-        if (strlen($this->characters) <= $this->length) {
-            throw new RuntimeException(
-                'The size of the character list must be bigger or equal to the length of the code'
-            );
+        if ($this->obfuscatingPrime <= $this->maxPrime) {
+            throw new RuntimeException('Obfuscating prime number must be larger than the max prime number');
         }
 
         if (count(array_unique(str_split($this->characters))) !== strlen($this->characters)) {
