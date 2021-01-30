@@ -226,7 +226,7 @@ class UniqueCodes
         for ($i = 0; $i < $this->length; $i++) {
             $digit = $number % strlen($characters);
 
-            $string = $characters[$digit] . $string;
+            $string = $characters[$digit].$string;
 
             $number = $number / strlen($characters);
         }
