@@ -231,13 +231,6 @@ class UniqueCodes
             $number = $number / strlen($characters);
         }
 
-    //     $to_len = strlen($to_alphabet);
-    // $result = '';
-    // while ($base10_value != '0') {
-    //     $result = $to_base_chars[bcmod($base10_value, $to_len)] . $result;
-    //     $base10_value = bcdiv($base10_value, $to_len, 0);
-    // }
-
         return $string;
     }
 

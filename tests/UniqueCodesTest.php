@@ -44,6 +44,7 @@ class UniqueCodesTest extends TestCase
             [30983, 98893, 3925, 4, '123456ABCDEFGH'],
             [495563, 968197, 86214, 6, 'ABCDEFGHI'],
             [1340021, 6824473, 46234, 8, 'ABCDEF'],
+            [7230323, 9006077, 4263725, 6, 'LQJCKZMWDPTSXRGANYVBHF']
         ];
     }
 
