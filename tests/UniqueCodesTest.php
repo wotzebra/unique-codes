@@ -80,6 +80,51 @@ class UniqueCodesTest extends TestCase
             [101, 387420489, 47, 8, 41],
             [101, 387420489, 47, 9, 84],
             [101, 387420489, 47, 10, 26],
+            [495563, 968197, 86214, 1, 472634],
+            [495563, 968197, 86214, 2, 449705],
+            [495563, 968197, 86214, 3, 426776],
+            [495563, 968197, 86214, 4, 403847],
+            [495563, 968197, 86214, 5, 380918],
+            [495563, 968197, 86214, 6, 357989],
+            [495563, 968197, 86214, 7, 335060],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider obfuscateNumbersWithinRangeProvider
+     */
+    public function it_obfuscates_numbers_within_range($maxPrime, $obfuscatingPrime)
+    {
+        $uniqueCodes = (new UniqueCodes())->setObfuscatingPrime($obfuscatingPrime)->setMaxPrime($maxPrime);
+
+        $class = new ReflectionClass($uniqueCodes);
+        $method = $class->getMethod('obfuscateNumber');
+        $method->setAccessible(true);
+
+        $result = [];
+
+        for ($i = 1; $i < $maxPrime; $i++) {
+            $result[] = $method->invokeArgs($uniqueCodes, [$i]);
+        }
+
+        sort($result);
+        $this->assertEquals(range(1, $maxPrime - 1), $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function obfuscateNumbersWithinRangeProvider()
+    {
+        return [
+            [101, 387420489],
+            [101, 191],
+            [30983, 98893],
+            [495563, 968197],
+            [1340021, 6824473],
+            [7230323, 9006077],
+            [495563, 968197],
         ];
     }
 
@@ -119,31 +164,6 @@ class UniqueCodesTest extends TestCase
             [1, 531440, 6, 'ABCDEFGHI'],
             [1, 1419856, 5, 'ABCDEFGHIJLKMNOPQ'],
         ];
-    }
-
-    /**
-     * Decode string to base10 number.
-     *
-     * @param string $string
-     * @param string $alphabet
-     *
-     * @return int
-     */
-    public function decode(string $value, string $alphabet)
-    {
-        $digits = str_split($value);
-        $stringLength = strlen($value);
-
-        $characters = str_split($alphabet);
-        $alphabetLength = strlen($alphabet);
-
-        $result = 0;
-
-        for ($i = 1; $i <= $stringLength; $i++) {
-            $result += (array_search($digits[$i - 1], $characters) * bcpow(strlen($alphabet), strlen($value) - $i));
-        }
-
-        return $result;
     }
 
     /** @test */
@@ -528,5 +548,27 @@ class UniqueCodesTest extends TestCase
             ->setCharacters('ABCDEFGHI')
             ->setLength(6)
             ->generate(50, 101);
+    }
+
+    /**
+     * Decode string to base10 number.
+     *
+     * @param string $string
+     * @param string $alphabet
+     *
+     * @return int
+     */
+    public function decode(string $value, string $alphabet)
+    {
+        $digits = str_split($value);
+        $characters = str_split($alphabet);
+
+        $result = 0;
+
+        for ($i = 1; $i <= strlen($value); $i++) {
+            $result += (array_search($digits[$i - 1], $characters) * bcpow(strlen($alphabet), strlen($value) - $i));
+        }
+
+        return $result;
     }
 }
