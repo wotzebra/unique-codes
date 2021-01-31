@@ -62,6 +62,9 @@ class UniqueCodesTest extends TestCase
 
         $this->assertEquals($expectedObfuscatedNumber, $obfuscatedNumber = $method->invokeArgs($uniqueCodes, [$number]));
         $this->assertEquals($number, ($obfuscatedNumber * $obfuscatingPrimeMultiplicativeInverse) % $maxPrime);
+
+        $this->assertEquals(0, $method->invokeArgs($uniqueCodes, [$maxPrime]));
+        $this->assertEquals($expectedObfuscatedNumber, $method->invokeArgs($uniqueCodes, [$number + $maxPrime]));
     }
 
     /**
@@ -87,6 +90,13 @@ class UniqueCodesTest extends TestCase
             [495563, 968197, 86214, 5, 380918],
             [495563, 968197, 86214, 6, 357989],
             [495563, 968197, 86214, 7, 335060],
+            [3469, 8311, 2471, 1, 1373],
+            [3469, 8311, 2471, 2, 2746],
+            [3469, 8311, 2471, 3, 650],
+            [3469, 8311, 2471, 4, 2023],
+            [3469, 8311, 2471, 5, 3396],
+            [3469, 8311, 2471, 6, 1300],
+            [3469, 8311, 2471, 7, 2673],
         ];
     }
 
