@@ -5,17 +5,184 @@ namespace NextApps\UniqueCodes\Tests;
 use Generator;
 use NextApps\UniqueCodes\UniqueCodes;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use RuntimeException;
 
 class UniqueCodesTest extends TestCase
 {
+    /**
+     * @test
+     * @dataProvider uniqueCodesProvider
+     */
+    public function it_generates_unique_codes($maxPrime, $obfuscatingPrime, $obfuscatingPrimeMultiplicativeInverse, $length, $characters)
+    {
+        $uniqueCodes = (new UniqueCodes())
+            ->setObfuscatingPrime($obfuscatingPrime)
+            ->setMaxPrime($maxPrime)
+            ->setCharacters($characters)
+            ->setLength($length)
+            ->generate(1, $maxPrime - 1, true);
+
+        $this->assertCount($maxPrime - 1, $uniqueCodes);
+        $this->assertCount($maxPrime - 1, array_unique($uniqueCodes));
+
+        foreach ($uniqueCodes as $index => $code) {
+            $obfuscatedNumber = $this->decode($code, $characters);
+
+            $this->assertEquals($index + 1, ($obfuscatedNumber * $obfuscatingPrimeMultiplicativeInverse) % $maxPrime);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function uniqueCodesProvider()
+    {
+        return [
+            [101, 387420489, 47, 3, 'ABCDE'],
+            [101, 191, 55, 3, '12345'],
+            [30983, 98893, 3925, 4, '123456ABCDEFGH'],
+            [495563, 968197, 86214, 6, 'ABCDEFGHI'],
+            [1340021, 6824473, 46234, 8, 'ABCDEF'],
+            [7230323, 9006077, 4263725, 6, 'LQJCKZMWDPTSXRGANYVBHF'],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider obfuscateNumbersProvider
+     */
+    public function it_obfuscates_numbers($maxPrime, $obfuscatingPrime, $obfuscatingPrimeMultiplicativeInverse, $number, $expectedObfuscatedNumber)
+    {
+        $uniqueCodes = (new UniqueCodes())->setObfuscatingPrime($obfuscatingPrime)->setMaxPrime($maxPrime);
+
+        $class = new ReflectionClass($uniqueCodes);
+        $method = $class->getMethod('obfuscateNumber');
+        $method->setAccessible(true);
+
+        $this->assertEquals($expectedObfuscatedNumber, $obfuscatedNumber = $method->invokeArgs($uniqueCodes, [$number]));
+        $this->assertEquals($number, ($obfuscatedNumber * $obfuscatingPrimeMultiplicativeInverse) % $maxPrime);
+
+        $this->assertEquals(0, $method->invokeArgs($uniqueCodes, [$maxPrime]));
+        $this->assertEquals($expectedObfuscatedNumber, $method->invokeArgs($uniqueCodes, [$number + $maxPrime]));
+    }
+
+    /**
+     * @return array
+     */
+    public function obfuscateNumbersProvider()
+    {
+        return [
+            [101, 387420489, 47, 1, 43],
+            [101, 387420489, 47, 2, 86],
+            [101, 387420489, 47, 3, 28],
+            [101, 387420489, 47, 4, 71],
+            [101, 387420489, 47, 5, 13],
+            [101, 387420489, 47, 6, 56],
+            [101, 387420489, 47, 7, 99],
+            [101, 387420489, 47, 8, 41],
+            [101, 387420489, 47, 9, 84],
+            [101, 387420489, 47, 10, 26],
+            [495563, 968197, 86214, 1, 472634],
+            [495563, 968197, 86214, 2, 449705],
+            [495563, 968197, 86214, 3, 426776],
+            [495563, 968197, 86214, 4, 403847],
+            [495563, 968197, 86214, 5, 380918],
+            [495563, 968197, 86214, 6, 357989],
+            [495563, 968197, 86214, 7, 335060],
+            [3469, 8311, 2471, 1, 1373],
+            [3469, 8311, 2471, 2, 2746],
+            [3469, 8311, 2471, 3, 650],
+            [3469, 8311, 2471, 4, 2023],
+            [3469, 8311, 2471, 5, 3396],
+            [3469, 8311, 2471, 6, 1300],
+            [3469, 8311, 2471, 7, 2673],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider obfuscateNumbersWithinRangeProvider
+     */
+    public function it_obfuscates_numbers_within_range($maxPrime, $obfuscatingPrime)
+    {
+        $uniqueCodes = (new UniqueCodes())->setObfuscatingPrime($obfuscatingPrime)->setMaxPrime($maxPrime);
+
+        $class = new ReflectionClass($uniqueCodes);
+        $method = $class->getMethod('obfuscateNumber');
+        $method->setAccessible(true);
+
+        $result = [];
+
+        for ($i = 1; $i < $maxPrime; $i++) {
+            $result[] = $method->invokeArgs($uniqueCodes, [$i]);
+        }
+
+        sort($result);
+        $this->assertEquals(range(1, $maxPrime - 1), $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function obfuscateNumbersWithinRangeProvider()
+    {
+        return [
+            [101, 387420489],
+            [101, 191],
+            [30983, 98893],
+            [495563, 968197],
+            [1340021, 6824473],
+            [7230323, 9006077],
+            [495563, 968197],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider encodeNumbersProvider
+     */
+    public function it_encodes_numbers($start, $end, $length, $characters)
+    {
+        $uniqueCodes = (new UniqueCodes())->setLength($length)->setCharacters($characters);
+
+        $class = new ReflectionClass($uniqueCodes);
+        $method = $class->getMethod('encodeNumber');
+        $method->setAccessible(true);
+
+        $result = [];
+        for ($i = $start; $i <= $end; $i++) {
+            $string = $method->invokeArgs($uniqueCodes, [$i]);
+
+            $this->assertEquals($i, $this->decode($string, $characters));
+
+            $result[] = $string;
+        }
+
+        $this->assertCount($end - $start + 1, $result);
+        $this->assertCount($end - $start + 1, array_unique($result));
+        $this->assertEquals(0, $this->decode($string, $method->invokeArgs($uniqueCodes, [$end + 1])));
+    }
+
+    /**
+     * @return array
+     */
+    public function encodeNumbersProvider()
+    {
+        return [
+            [1, 1295, 4, 'ABCDEF'],
+            [1, 531440, 6, 'ABCDEFGHI'],
+            [1, 1419856, 5, 'ABCDEFGHIJLKMNOPQ'],
+        ];
+    }
+
     /** @test */
     public function it_returns_generator_by_default()
     {
         $codes = (new UniqueCodes())
-            ->setPrime(17)
+            ->setObfuscatingPrime(191)
             ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+            ->setCharacters('ABCDEFGHI')
             ->setLength(6)
             ->generate(1, 100);
 
@@ -26,9 +193,9 @@ class UniqueCodesTest extends TestCase
     public function it_returns_array_if_requested()
     {
         $codes = (new UniqueCodes())
-            ->setPrime(17)
+            ->setObfuscatingPrime(191)
             ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+            ->setCharacters('ABCDEFGHI')
             ->setLength(6)
             ->generate(1, 100, true);
 
@@ -39,9 +206,9 @@ class UniqueCodesTest extends TestCase
     public function it_returns_string_if_no_end_provided()
     {
         $code = (new UniqueCodes())
-            ->setPrime(17)
+            ->setObfuscatingPrime(191)
             ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+            ->setCharacters('ABCDEFGHI')
             ->setLength(6)
             ->generate(100);
 
@@ -49,53 +216,13 @@ class UniqueCodesTest extends TestCase
     }
 
     /** @test */
-    public function it_generates_unique_codes()
-    {
-        $codes = iterator_to_array(
-            (new UniqueCodes())
-                ->setPrime(17)
-                ->setMaxPrime(101)
-                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-                ->setLength(6)
-                ->generate(1, 100)
-        );
-
-        $this->assertCount(100, $codes);
-        $this->assertCount(100, array_unique($codes));
-
-        $codes = iterator_to_array(
-            (new UniqueCodes())
-                ->setPrime(30983)
-                ->setMaxPrime(98893)
-                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-                ->setLength(6)
-                ->generate(1, 98892)
-        );
-
-        $this->assertCount(98892, $codes);
-        $this->assertCount(98892, array_unique($codes));
-
-        $codes = iterator_to_array(
-            (new UniqueCodes())
-                ->setPrime(13)
-                ->setMaxPrime(113)
-                ->setCharacters('ABCDE')
-                ->setLength(4)
-                ->generate(1, 112)
-        );
-
-        $this->assertCount(112, $codes);
-        $this->assertCount(112, array_unique($codes));
-    }
-
-    /** @test */
     public function it_generates_unique_codes_within_range()
     {
         $codes = iterator_to_array(
             (new UniqueCodes())
-                ->setPrime(17)
+                ->setObfuscatingPrime(191)
                 ->setMaxPrime(101)
-                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+                ->setCharacters('ABCDEFGHI')
                 ->setLength(6)
                 ->generate(25, 75)
         );
@@ -109,9 +236,9 @@ class UniqueCodesTest extends TestCase
     {
         $codes = iterator_to_array(
             (new UniqueCodes())
-                ->setPrime(17)
+                ->setObfuscatingPrime(191)
                 ->setMaxPrime(101)
-                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+                ->setCharacters('ABCDEFGHI')
                 ->setLength(6)
                 ->generate(25, 25)
         );
@@ -125,7 +252,7 @@ class UniqueCodesTest extends TestCase
     {
         $codes = iterator_to_array(
             (new UniqueCodes())
-                ->setPrime(17)
+                ->setObfuscatingPrime(191)
                 ->setMaxPrime(101)
                 ->setCharacters($characters = 'ABCDEFG')
                 ->setLength(6)
@@ -143,7 +270,7 @@ class UniqueCodesTest extends TestCase
     {
         $codes = iterator_to_array(
             (new UniqueCodes())
-                ->setPrime(17)
+                ->setObfuscatingPrime(191)
                 ->setMaxPrime(101)
                 ->setCharacters($characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G'])
                 ->setLength(6)
@@ -163,9 +290,9 @@ class UniqueCodesTest extends TestCase
     {
         $codes = iterator_to_array(
             (new UniqueCodes())
-                ->setPrime(17)
+                ->setObfuscatingPrime(191)
                 ->setMaxPrime(101)
-                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+                ->setCharacters('ABCDEFGHI')
                 ->setLength(6)
                 ->setPrefix('TEST')
                 ->generate(1, 100)
@@ -184,9 +311,9 @@ class UniqueCodesTest extends TestCase
     {
         $codes = iterator_to_array(
             (new UniqueCodes())
-                ->setPrime(17)
+                ->setObfuscatingPrime(191)
                 ->setMaxPrime(101)
-                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+                ->setCharacters('ABCDEFGHI')
                 ->setLength(6)
                 ->setSuffix('TEST')
                 ->generate(1, 100)
@@ -205,9 +332,9 @@ class UniqueCodesTest extends TestCase
     {
         $codes = iterator_to_array(
             (new UniqueCodes())
-                ->setPrime(17)
+                ->setObfuscatingPrime(191)
                 ->setMaxPrime(101)
-                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+                ->setCharacters('ABCDEFGHI')
                 ->setLength(6)
                 ->setPrefix('PREFIX')
                 ->setSuffix('SUFFIX')
@@ -228,9 +355,9 @@ class UniqueCodesTest extends TestCase
     {
         $codes = iterator_to_array(
             (new UniqueCodes())
-                ->setPrime(17)
+                ->setObfuscatingPrime(191)
                 ->setMaxPrime(101)
-                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+                ->setCharacters('ABCDEFGHI')
                 ->setLength(6)
                 ->setDelimiter('-', 3)
                 ->generate(1, 100)
@@ -249,9 +376,9 @@ class UniqueCodesTest extends TestCase
     {
         $codes = iterator_to_array(
             (new UniqueCodes())
-                ->setPrime(17)
+                ->setObfuscatingPrime(191)
                 ->setMaxPrime(101)
-                ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+                ->setCharacters('ABCDEFGHI')
                 ->setLength(6)
                 ->setPrefix('PREFIX')
                 ->setSuffix('SUFFIX')
@@ -270,14 +397,14 @@ class UniqueCodesTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_exception_if_prime_is_not_specified()
+    public function it_throws_exception_if_obfuscating_prime_is_not_specified()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Prime number must be specified');
+        $this->expectExceptionMessage('Obfuscating prime number must be specified');
 
         (new UniqueCodes())
             ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+            ->setCharacters('ABCDEFGHI')
             ->setLength(6)
             ->generate(1, 100);
     }
@@ -289,8 +416,8 @@ class UniqueCodesTest extends TestCase
         $this->expectExceptionMessage('Max prime number must be specified');
 
         (new UniqueCodes())
-            ->setPrime(17)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+            ->setObfuscatingPrime(191)
+            ->setCharacters('ABCDEFGHI')
             ->setLength(6)
             ->generate(1, 100);
     }
@@ -302,7 +429,7 @@ class UniqueCodesTest extends TestCase
         $this->expectExceptionMessage('Character list must be specified');
 
         (new UniqueCodes())
-            ->setPrime(17)
+            ->setObfuscatingPrime(191)
             ->setMaxPrime(101)
             ->setLength(6)
             ->generate(1, 100);
@@ -315,64 +442,36 @@ class UniqueCodesTest extends TestCase
         $this->expectExceptionMessage('Length must be specified');
 
         (new UniqueCodes())
-            ->setPrime(17)
+            ->setObfuscatingPrime(191)
             ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+            ->setCharacters('ABCDEFGHI')
             ->generate(1, 100);
     }
 
     /** @test */
-    public function it_throws_exception_if_prime_number_is_bigger_than_max_prime_number()
+    public function it_throws_exception_if_obfuscating_prime_number_is_smaller_than_max_prime_number()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Prime number must be smaller than the max prime number');
+        $this->expectExceptionMessage('Obfuscating prime number must be larger than the max prime number');
 
         (new UniqueCodes())
-            ->setPrime(101)
-            ->setMaxPrime(17)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+            ->setObfuscatingPrime(17)
+            ->setMaxPrime(101)
+            ->setCharacters('ABCDEFGHI')
             ->setLength(6)
             ->generate(1, 100);
     }
 
     /** @test */
-    public function it_throws_exception_if_prime_number_is_equal_to_max_prime_number()
+    public function it_throws_exception_if_obfuscating_prime_number_is_equal_to_max_prime_number()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Prime number must be smaller than the max prime number');
+        $this->expectExceptionMessage('Obfuscating prime number must be larger than the max prime number');
 
         (new UniqueCodes())
-            ->setPrime(101)
+            ->setObfuscatingPrime(101)
             ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
-            ->setLength(6)
-            ->generate(1, 100);
-    }
-
-    /** @test */
-    public function it_throws_exception_if_size_of_character_list_is_smaller_than_specified_code_length()
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('The size of the character list must be bigger or equal to the length of the code');
-
-        (new UniqueCodes())
-            ->setPrime(17)
-            ->setMaxPrime(101)
-            ->setCharacters('LQJCK')
-            ->setLength(6)
-            ->generate(1, 100);
-    }
-
-    /** @test */
-    public function it_throws_exception_if_size_of_character_list_equals_specified_code_length()
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('The size of the character list must be bigger or equal to the length of the code');
-
-        (new UniqueCodes())
-            ->setPrime(17)
-            ->setMaxPrime(101)
-            ->setCharacters('LQJCKZ')
+            ->setCharacters('ABCDEFGHI')
             ->setLength(6)
             ->generate(1, 100);
     }
@@ -384,9 +483,9 @@ class UniqueCodesTest extends TestCase
         $this->expectExceptionMessage('The character list can not contain duplicates');
 
         (new UniqueCodes())
-            ->setPrime(17)
+            ->setObfuscatingPrime(191)
             ->setMaxPrime(101)
-            ->setCharacters('LQJCKZL')
+            ->setCharacters('ABCDEFGHIA')
             ->setLength(6)
             ->generate(1, 100);
     }
@@ -398,9 +497,9 @@ class UniqueCodesTest extends TestCase
         $this->expectExceptionMessage('The length of the code is too short or the character list is too small to create the number of unique codes equal to the max prime number');
 
         (new UniqueCodes())
-            ->setPrime(17)
+            ->setObfuscatingPrime(191)
             ->setMaxPrime(101)
-            ->setCharacters('LQJC')
+            ->setCharacters('ABCD')
             ->setLength(3)
             ->generate(1, 100);
     }
@@ -412,9 +511,9 @@ class UniqueCodesTest extends TestCase
         $this->expectExceptionMessage('The start number must be bigger than zero');
 
         (new UniqueCodes())
-            ->setPrime(17)
+            ->setObfuscatingPrime(191)
             ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+            ->setCharacters('ABCDEFGHI')
             ->setLength(6)
             ->generate(-1, 100);
     }
@@ -426,9 +525,9 @@ class UniqueCodesTest extends TestCase
         $this->expectExceptionMessage('The start number must be bigger than zero');
 
         (new UniqueCodes())
-            ->setPrime(17)
+            ->setObfuscatingPrime(191)
             ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+            ->setCharacters('ABCDEFGHI')
             ->setLength(6)
             ->generate(0, 100);
     }
@@ -440,9 +539,9 @@ class UniqueCodesTest extends TestCase
         $this->expectExceptionMessage('The end number can not be bigger or equal to the max prime number');
 
         (new UniqueCodes())
-            ->setPrime(17)
+            ->setObfuscatingPrime(191)
             ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+            ->setCharacters('ABCDEFGHI')
             ->setLength(6)
             ->generate(50, 150);
     }
@@ -454,10 +553,32 @@ class UniqueCodesTest extends TestCase
         $this->expectExceptionMessage('The end number can not be bigger or equal to the max prime number');
 
         (new UniqueCodes())
-            ->setPrime(17)
+            ->setObfuscatingPrime(191)
             ->setMaxPrime(101)
-            ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+            ->setCharacters('ABCDEFGHI')
             ->setLength(6)
             ->generate(50, 101);
+    }
+
+    /**
+     * Decode string to base10 number.
+     *
+     * @param string $string
+     * @param string $alphabet
+     *
+     * @return int
+     */
+    public function decode(string $value, string $alphabet)
+    {
+        $digits = str_split($value);
+        $characters = str_split($alphabet);
+
+        $result = 0;
+
+        for ($i = 1; $i <= strlen($value); $i++) {
+            $result += (array_search($digits[$i - 1], $characters) * bcpow(strlen($alphabet), strlen($value) - $i));
+        }
+
+        return $result;
     }
 }

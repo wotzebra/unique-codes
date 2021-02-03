@@ -11,7 +11,7 @@ class UniqueCodes
      *
      * @var int
      */
-    protected $prime;
+    protected $obfuscatingPrime;
 
     /**
      * The prime number that is one larger than the maximum number that can be converted to a code.
@@ -63,15 +63,15 @@ class UniqueCodes
     protected $length;
 
     /**
-     * Set the prime number.
+     * Set the obfuscating prime number.
      *
      * @param int $prime
      *
      * @return self
      */
-    public function setPrime(int $prime)
+    public function setObfuscatingPrime(int $obfuscatingPrime)
     {
-        $this->prime = $prime;
+        $this->obfuscatingPrime = $obfuscatingPrime;
 
         return $this;
     }
@@ -208,7 +208,7 @@ class UniqueCodes
      */
     protected function obfuscateNumber(int $number)
     {
-        return ($number * $this->prime) % $this->maxPrime;
+        return ($number * $this->obfuscatingPrime) % $this->maxPrime;
     }
 
     /**
@@ -226,7 +226,7 @@ class UniqueCodes
         for ($i = 0; $i < $this->length; $i++) {
             $digit = $number % strlen($characters);
 
-            $string .= $characters[$digit];
+            $string = $characters[$digit].$string;
 
             $number = $number / strlen($characters);
         }
@@ -274,8 +274,8 @@ class UniqueCodes
      */
     protected function validateInput(int $start, int $end = null)
     {
-        if (empty($this->prime)) {
-            throw new RuntimeException('Prime number must be specified');
+        if (empty($this->obfuscatingPrime)) {
+            throw new RuntimeException('Obfuscating prime number must be specified');
         }
 
         if (empty($this->maxPrime)) {
@@ -290,14 +290,8 @@ class UniqueCodes
             throw new RuntimeException('Length must be specified');
         }
 
-        if ($this->prime >= $this->maxPrime) {
-            throw new RuntimeException('Prime number must be smaller than the max prime number');
-        }
-
-        if (strlen($this->characters) <= $this->length) {
-            throw new RuntimeException(
-                'The size of the character list must be bigger or equal to the length of the code'
-            );
+        if ($this->obfuscatingPrime <= $this->maxPrime) {
+            throw new RuntimeException('Obfuscating prime number must be larger than the max prime number');
         }
 
         if (count(array_unique(str_split($this->characters))) !== strlen($this->characters)) {

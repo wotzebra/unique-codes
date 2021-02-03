@@ -12,13 +12,13 @@ use NextApps\UniqueCodes\UniqueCodes;
 
 // Generate 100 unique codes for numbers 1 to 100
 $codes = (new UniqueCodes())
-    ->setPrime(184259)
+    ->setObfuscatingPrime(9006077)
     ->setMaxPrime(7230323)
-    ->setCharacters('LQJCKZM4WDPT69S7XRGANY23VBH58F1')
+    ->setCharacters('LQJCKZMWDPTSXRGANYVBHF')
     ->setLength(6)
     ->generate(1, 100);
 
-// Result: H2ZMLL (1), YST6LL (2), XMRGLL (3), ... , 9ZCDKL (100)
+// Result: LWXNHJ (1), LACSVK (2), QLNMNM (3), ... , LYMJHL (100), QJVBVJ (101), LQXGQC (102), ... , LJQ5DJ (7230320), LC17CS (7230321), LZ8J8H (7230322)
 ```
 
 ## Installation
@@ -28,6 +28,7 @@ You can install the package via composer:
 ```bash
 composer require nextapps/unique-codes
 ```
+> Do not use v1 of this package, as it contains bugs. If you currently use v1, you should upgrade to v2 (Read the upgrading guide!).
 
 ## Usage
 
@@ -51,19 +52,19 @@ If a lot of codes need to be generated at the same time, it can cause a lot of m
 ### Setters
 
 Certain setters are required to generate unique codes:
-* `setPrime()`
+* `setObfuscatingPrime()`
 * `setMaxPrime()`
 * `setCharacters()`
 * `setLength()`
 
-#### setPrime($number)
+#### setObfuscatingPrime($number)
 
-This prime number is used to obfuscate a number between 1 and the max prime number.
+This prime number is used to obfuscate a number between 1 and the max prime number. This prime number must be bigger than your max prime number (which you provide to the `setMaxPrime` method).
 
 #### setMaxPrime($number)
 
 The max prime determines the maximum amount of unique codes you can generate. If you provide `101`, then you can generate codes from 1 to 100.
-This prime number must be bigger than the prime number you provide to the `setPrime` method.
+This prime number must be smaller than the prime number you provide to the `setObfuscatingPrime` method.
 
 #### setCharacters($string)
 
@@ -95,10 +96,10 @@ The code generation consists of 2 steps:
 
 If you encode sequential numbers, you will still see that the encoded strings are sequential. To remove the sequential nature, we use 'modular multiplicative inverse'.
 
-You define the upper limit of your range. This determines the maximum number you can obfuscate. Then every number is mapped to a unique obfuscated number between 1 and the upper limit. You multiply the input number with a random prime number, and you determine the remainder of the division of your multiplied input number by the upper limit of the range.
+You define the upper limit of your range. This determines the maximum number you can obfuscate. Then every number is mapped to a unique obfuscated number between 1 and the upper limit. You multiply the input number with a random (larger) prime number, and you determine the remainder of the division of your multiplied input number by the upper limit of the range.
 
 ```
-$obfuscatedNumber = ($inputNumber * $primeNumber) % $maxPrimeNumber
+$obfuscatedNumber = ($inputNumber * $obfuscatingPrimeNumber) % $maxPrimeNumber
 ```
 
 #### Encoding the obfuscated number
