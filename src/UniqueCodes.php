@@ -6,51 +6,127 @@ use RuntimeException;
 
 class UniqueCodes
 {
-    protected int $obfuscatingPrime;
+    /**
+     * The prime number that is used to convert a number to a unique other number within the maximum range.
+     *
+     * @var int
+     */
+    protected $obfuscatingPrime;
 
-    protected int $maxPrime;
+    /**
+     * The prime number that is one larger than the maximum number that can be converted to a code.
+     *
+     * @var int
+     */
+    protected $maxPrime;
 
-    protected ?string $suffix = null;
+    /**
+     * The suffix that will be added to every code.
+     *
+     * @var null|string
+     */
+    protected $suffix;
 
-    protected ?string $prefix = null;
+    /**
+     * The prefix that will be added to every code.
+     *
+     * @var null|string
+     */
+    protected $prefix;
 
-    protected ?string $delimiter = null;
+    /**
+     * The delimiter that separates the different parts of the generated code.
+     *
+     * @var null|string
+     */
+    protected $delimiter;
 
-    protected ?int $splitLength = null;
+    /**
+     * The size of every part of the generated code.
+     *
+     * @var null|int
+     */
+    protected $splitLength;
 
-    protected string $characters;
+    /**
+     * The list of characters that a generated code can contain.
+     *
+     * @var string
+     */
+    protected $characters;
 
-    protected int $length;
+    /**
+     * The length of the code.
+     *
+     * @var int
+     */
+    protected $length;
 
-    public function setObfuscatingPrime(int $obfuscatingPrime) : self
+    /**
+     * Set the obfuscating prime number.
+     *
+     * @param int $prime
+     *
+     * @return self
+     */
+    public function setObfuscatingPrime(int $obfuscatingPrime)
     {
         $this->obfuscatingPrime = $obfuscatingPrime;
 
         return $this;
     }
 
-    public function setMaxPrime(int $maxPrime) : self
+    /**
+     * Set the max prime number.
+     *
+     * @param int $maxPrime
+     *
+     * @return self
+     */
+    public function setMaxPrime(int $maxPrime)
     {
         $this->maxPrime = $maxPrime;
 
         return $this;
     }
 
-    public function setSuffix(string $suffix) : self
+    /**
+     * Set the suffix.
+     *
+     * @param string $suffix
+     *
+     * @return self
+     */
+    public function setSuffix(string $suffix)
     {
         $this->suffix = $suffix;
 
         return $this;
     }
 
-    public function setPrefix(string $prefix) : self
+    /**
+     * Set the prefix.
+     *
+     * @param string $prefix
+     *
+     * @return self
+     */
+    public function setPrefix(string $prefix)
     {
         $this->prefix = $prefix;
 
         return $this;
     }
 
-    public function setDelimiter(string $delimiter, ?int $splitLength = null) : self
+    /**
+     * Set the delimiter.
+     *
+     * @param string $delimiter
+     * @param int|null $splitLength
+     *
+     * @return self
+     */
+    public function setDelimiter(string $delimiter, int $splitLength = null)
     {
         $this->delimiter = $delimiter;
         $this->splitLength = $splitLength;
@@ -65,7 +141,7 @@ class UniqueCodes
      *
      * @return self
      */
-    public function setCharacters($characters) : self
+    public function setCharacters($characters)
     {
         if (is_array($characters)) {
             $characters = implode('', $characters);
@@ -76,7 +152,14 @@ class UniqueCodes
         return $this;
     }
 
-    public function setLength(int $length) : self
+    /**
+     * Set the length.
+     *
+     * @param int $length
+     *
+     * @return self
+     */
+    public function setLength(int $length)
     {
         $this->length = $length;
 
@@ -116,12 +199,26 @@ class UniqueCodes
         return $generator;
     }
 
-    protected function obfuscateNumber(int $number) : int
+    /**
+     * Map number to a unique other number smaller than the max prime number.
+     *
+     * @param int $number
+     *
+     * @return int
+     */
+    protected function obfuscateNumber(int $number)
     {
         return ($number * $this->obfuscatingPrime) % $this->maxPrime;
     }
 
-    protected function encodeNumber(int $number) : string
+    /**
+     * Encode number into characters.
+     *
+     * @param int $number
+     *
+     * @return string
+     */
+    protected function encodeNumber(int $number)
     {
         $string = '';
         $characters = $this->characters;
@@ -137,7 +234,14 @@ class UniqueCodes
         return $string;
     }
 
-    protected function constructCode(string $string) : string
+    /**
+     * Construct the code.
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    protected function constructCode($string)
     {
         $code = '';
 
@@ -158,7 +262,17 @@ class UniqueCodes
         return $code;
     }
 
-    protected function validateInput(int $start, ?int $end = null) : void
+    /**
+     * Check if all property values are valid.
+     *
+     * @param int $start
+     * @param null|int $end
+     *
+     * @throws \RuntimeException
+     *
+     * @return void
+     */
+    protected function validateInput(int $start, int $end = null)
     {
         if (empty($this->obfuscatingPrime)) {
             throw new RuntimeException('Obfuscating prime number must be specified');
@@ -199,7 +313,12 @@ class UniqueCodes
         }
     }
 
-    protected function getMaximumUniqueCodes() : int
+    /**
+     * Get the maximum amount of unique codes that can create based the characters.
+     *
+     * @return int
+     */
+    protected function getMaximumUniqueCodes()
     {
         return pow(strlen($this->characters), $this->length);
     }
