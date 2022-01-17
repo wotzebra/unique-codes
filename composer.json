@@ -28,7 +28,7 @@
         "php": "^7.3|^8.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.17|^3.5",
+        "friendsofphp/php-cs-fixer": "^2.17|^3.0",
         "phpunit/phpunit": "^8.0|^9.0"
     },
     "autoload": {
@@ -45,7 +45,7 @@
         "test": "vendor/bin/phpunit",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
         "lint": "vendor/bin/php-cs-fixer fix",
-        "lint-dry": "vendor/bin/php-cs-fixer fix --dry-run --diff-format=udiff"
+        "lint-dry": "vendor/bin/php-cs-fixer fix --dry-run"
     },
     "config": {
         "sort-packages": true
