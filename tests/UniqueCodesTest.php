@@ -33,10 +33,7 @@ class UniqueCodesTest extends TestCase
         }
     }
 
-    /**
-     * @return array
-     */
-    public function uniqueCodesProvider()
+    public function uniqueCodesProvider() : array
     {
         return [
             [101, 387420489, 47, 3, 'ABCDE'],
@@ -67,10 +64,7 @@ class UniqueCodesTest extends TestCase
         $this->assertEquals($expectedObfuscatedNumber, $method->invokeArgs($uniqueCodes, [$number + $maxPrime]));
     }
 
-    /**
-     * @return array
-     */
-    public function obfuscateNumbersProvider()
+    public function obfuscateNumbersProvider() : array
     {
         return [
             [101, 387420489, 47, 1, 43],
@@ -122,10 +116,7 @@ class UniqueCodesTest extends TestCase
         $this->assertEquals(range(1, $maxPrime - 1), $result);
     }
 
-    /**
-     * @return array
-     */
-    public function obfuscateNumbersWithinRangeProvider()
+    public function obfuscateNumbersWithinRangeProvider() : array
     {
         return [
             [101, 387420489],
@@ -164,10 +155,7 @@ class UniqueCodesTest extends TestCase
         $this->assertEquals(0, $this->decode($string, $method->invokeArgs($uniqueCodes, [$end + 1])));
     }
 
-    /**
-     * @return array
-     */
-    public function encodeNumbersProvider()
+    public function encodeNumbersProvider() : array
     {
         return [
             [1, 1295, 4, 'ABCDEF'],
@@ -560,15 +548,7 @@ class UniqueCodesTest extends TestCase
             ->generate(50, 101);
     }
 
-    /**
-     * Decode string to base10 number.
-     *
-     * @param string $string
-     * @param string $alphabet
-     *
-     * @return int
-     */
-    public function decode(string $value, string $alphabet)
+    public function decode(string $value, string $alphabet) : int
     {
         $digits = str_split($value);
         $characters = str_split($alphabet);
