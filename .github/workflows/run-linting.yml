@@ -9,10 +9,10 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            -   name: Checkout code
-                uses: actions/checkout@v2
+            - name: Checkout code
+              uses: actions/checkout@v2
 
-            -   name: Fix style
-                uses: docker://oskarstark/php-cs-fixer-ga
-                with:
-                    args: --config=.php_cs --dry-run --diff-format="udiff"
+            - name: Execute linting
+              run: |
+                vendor/bin/php-cs-fixer fix --dry-run
+                vendor/bin/phpcs --colors --report-full
