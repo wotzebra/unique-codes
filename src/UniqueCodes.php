@@ -23,28 +23,28 @@ class UniqueCodes
     /**
      * The suffix that will be added to every code.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $suffix;
 
     /**
      * The prefix that will be added to every code.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $prefix;
 
     /**
      * The delimiter that separates the different parts of the generated code.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $delimiter;
 
     /**
      * The size of every part of the generated code.
      *
-     * @var null|int
+     * @var int|null
      */
     protected $splitLength;
 
@@ -266,7 +266,7 @@ class UniqueCodes
      * Check if all property values are valid.
      *
      * @param int $start
-     * @param null|int $end
+     * @param int|null $end
      *
      * @throws \RuntimeException
      *
