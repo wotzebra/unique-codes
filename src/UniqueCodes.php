@@ -87,10 +87,10 @@ class UniqueCodes
      * Generate the necessary amount of codes.
      *
      * @param int $start
-     * @param null|int $end
+     * @param int|null $end
      * @param bool $toArray
      *
-     * @return \Generator|array|string
+     * @return array|\Generator|string
      */
     public function generate(int $start, int $end = null, bool $toArray = false)
     {
@@ -129,7 +129,7 @@ class UniqueCodes
         for ($i = 0; $i < $this->length; $i++) {
             $digit = (int) $number % strlen($characters);
 
-            $string = $characters[$digit].$string;
+            $string = $characters[$digit] . $string;
 
             $number = $number / strlen($characters);
         }
@@ -142,7 +142,7 @@ class UniqueCodes
         $code = '';
 
         if ($this->prefix !== null) {
-            $code .= $this->prefix.$this->delimiter;
+            $code .= $this->prefix . $this->delimiter;
         }
 
         if ($this->splitLength !== null) {
@@ -152,7 +152,7 @@ class UniqueCodes
         }
 
         if ($this->suffix !== null) {
-            $code .= $this->delimiter.$this->suffix;
+            $code .= $this->delimiter . $this->suffix;
         }
 
         return $code;

@@ -28,8 +28,8 @@
         "php": "^7.3|^8.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.17",
-        "phpunit/phpunit": "^8.0"
+        "friendsofphp/php-cs-fixer": "^2.17|^3.5",
+        "phpunit/phpunit": "^8.0|^9.0"
     },
     "autoload": {
         "psr-4": {
