@@ -1,5 +1,6 @@
 <?php
 
+use AdamWojs\PhpCsFixerPhpdocForceFQCN\Fixer\Phpdoc\ForceFQCNFixer;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
@@ -177,6 +178,8 @@ $rules = [
     'unary_operator_spaces' => true,
     // In array declaration, there MUST be a whitespace after each comma.
     'whitespace_after_comma_in_array' => true,
+    // Force Fully-Qualified Class Name in docblocks
+    'AdamWojs/phpdoc_force_fqcn_fixer' => true,
 ];
 
 $finder = Finder::create()
@@ -191,5 +194,8 @@ $finder = Finder::create()
     ->ignoreVCS(true);
 
 return (new Config())
+    ->registerCustomFixers([
+        new ForceFQCNFixer(),
+    ])
     ->setRules($rules)
     ->setFinder($finder);

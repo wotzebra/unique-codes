@@ -40,3 +40,4 @@ jobs:
             - name: Execute linting
               run: |
                 vendor/bin/php-cs-fixer fix --dry-run
+                vendor/bin/phpcs --colors --report-full

@@ -224,7 +224,7 @@ class UniqueCodes
         $characters = $this->characters;
 
         for ($i = 0; $i < $this->length; $i++) {
-            $digit = (int) $number % strlen($characters);
+            $digit = (int) ($number % strlen($characters));
 
             $string = $characters[$digit] . $string;
 
@@ -300,7 +300,8 @@ class UniqueCodes
 
         if ($this->getMaximumUniqueCodes() <= $this->maxPrime) {
             throw new RuntimeException(
-                'The length of the code is too short or the character list is too small to create the number of unique codes equal to the max prime number'
+                'The length of the code is too short or the character list is too small ' .
+                'to create the number of unique codes equal to the max prime number'
             );
         }
 
