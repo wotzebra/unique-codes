@@ -23,28 +23,28 @@ class UniqueCodes
     /**
      * The suffix that will be added to every code.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $suffix;
 
     /**
      * The prefix that will be added to every code.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $prefix;
 
     /**
      * The delimiter that separates the different parts of the generated code.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $delimiter;
 
     /**
      * The size of every part of the generated code.
      *
-     * @var null|int
+     * @var int|null
      */
     protected $splitLength;
 
@@ -170,10 +170,10 @@ class UniqueCodes
      * Generate the necessary amount of codes.
      *
      * @param int $start
-     * @param null|int $end
+     * @param int|null $end
      * @param bool $toArray
      *
-     * @return \Generator|array|string
+     * @return array|\Generator|string
      */
     public function generate(int $start, int $end = null, bool $toArray = false)
     {
@@ -224,9 +224,9 @@ class UniqueCodes
         $characters = $this->characters;
 
         for ($i = 0; $i < $this->length; $i++) {
-            $digit = $number % strlen($characters);
+            $digit = (int) ($number % strlen($characters));
 
-            $string = $characters[$digit].$string;
+            $string = $characters[$digit] . $string;
 
             $number = $number / strlen($characters);
         }
@@ -246,7 +246,7 @@ class UniqueCodes
         $code = '';
 
         if ($this->prefix !== null) {
-            $code .= $this->prefix.$this->delimiter;
+            $code .= $this->prefix . $this->delimiter;
         }
 
         if ($this->splitLength !== null) {
@@ -256,7 +256,7 @@ class UniqueCodes
         }
 
         if ($this->suffix !== null) {
-            $code .= $this->delimiter.$this->suffix;
+            $code .= $this->delimiter . $this->suffix;
         }
 
         return $code;
@@ -266,7 +266,7 @@ class UniqueCodes
      * Check if all property values are valid.
      *
      * @param int $start
-     * @param null|int $end
+     * @param int|null $end
      *
      * @throws \RuntimeException
      *
@@ -300,7 +300,8 @@ class UniqueCodes
 
         if ($this->getMaximumUniqueCodes() <= $this->maxPrime) {
             throw new RuntimeException(
-                'The length of the code is too short or the character list is too small to create the number of unique codes equal to the max prime number'
+                'The length of the code is too short or the character list is too small ' .
+                'to create the number of unique codes equal to the max prime number'
             );
         }
 
