@@ -1,7 +1,6 @@
 # Unique Codes
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/nextapps/unique-codes.svg?style=flat-square)](https://packagist.org/packages/nextapps/unique-codes)
-[![GitHub 'Run Tests' Workflow Status](https://img.shields.io/github/workflow/status/nextapps-be/unique-codes/run-tests?label=tests&style=flat-square&logo=github)](https://github.com/nextapps-be/unique-codes/actions?query=workflow%3Arun-tests)
 [![Total Downloads](https://img.shields.io/packagist/dt/nextapps/unique-codes.svg?style=flat-square)](https://packagist.org/packages/nextapps/unique-codes)
 
 This package generates unique, random-looking codes. These codes can be used for vouchers, coupons, ...
