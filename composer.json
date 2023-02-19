@@ -25,7 +25,7 @@
         }
     ],
     "require": {
-        "php": "^7.3|^7.4|^8.0|^8.1"
+        "php": "^7.3|^7.4|^8.0|^8.1|^8.2"
     },
     "require-dev": {
         "adamwojs/php-cs-fixer-phpdoc-force-fqcn": "^2.0",
