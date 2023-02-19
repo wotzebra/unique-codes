@@ -12,6 +12,7 @@ class UniqueCodesTest extends TestCase
 {
     /**
      * @test
+     *
      * @dataProvider uniqueCodesProvider
      */
     public function it_generates_unique_codes($maxPrime, $obfuscatingPrime, $obfuscatingPrimeMultiplicativeInverse, $length, $characters)
@@ -47,6 +48,7 @@ class UniqueCodesTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider obfuscateNumbersProvider
      */
     public function it_obfuscates_numbers($maxPrime, $obfuscatingPrime, $obfuscatingPrimeMultiplicativeInverse, $number, $expectedObfuscatedNumber)
@@ -96,6 +98,7 @@ class UniqueCodesTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider obfuscateNumbersWithinRangeProvider
      */
     public function it_obfuscates_numbers_within_range($maxPrime, $obfuscatingPrime)
@@ -131,6 +134,7 @@ class UniqueCodesTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider encodeNumbersProvider
      */
     public function it_encodes_numbers($start, $end, $length, $characters)
