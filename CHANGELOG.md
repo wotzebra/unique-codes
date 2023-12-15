@@ -2,6 +2,10 @@
 
 All notable changes to `unique-codes` will be documented in this file
 
+## 2.3.0 - 2023-12-15
+
+- Added: PHP 8.3 support ([#11](https://github.com/nextapps-be/unique-codes/pull/11))
+
 ## 2.2.0 - 2023-02-19
 
 - Add PHP 8.2 support ([#10](https://github.com/nextapps-be/unique-codes/pull/10))
