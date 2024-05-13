@@ -2,6 +2,10 @@
 
 All notable changes to `unique-codes` will be documented in this file
 
+## 2.3.1 - 2024-05-13
+
+- Fixed: Implicit conversion deprecation warning when converting float to int ([#12](https://github.com/nextapps-be/unique-codes/pull/12))
+
 ## 2.3.0 - 2023-12-15
 
 - Added: PHP 8.3 support ([#11](https://github.com/nextapps-be/unique-codes/pull/11))
