@@ -2,6 +2,10 @@
 
 All notable changes to `unique-codes` will be documented in this file
 
+## 2.3.2 - 2024-05-13
+
+- Fixed: Implicit conversion deprecation warning when converting float to int ([#ebd6914](https://github.com/nextapps-be/unique-codes/commit/ebd6914f7bf1c843a9cf5ab888e454503400db22))
+
 ## 2.3.1 - 2024-05-13
 
 - Fixed: Implicit conversion deprecation warning when converting float to int ([#12](https://github.com/nextapps-be/unique-codes/pull/12))
