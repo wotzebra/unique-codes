@@ -1,12 +1,12 @@
 <?php
 
-namespace NextApps\UniqueCodes\Tests;
+namespace Wotz\UniqueCodes\Tests;
 
 use Generator;
-use NextApps\UniqueCodes\UniqueCodes;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use RuntimeException;
+use Wotz\UniqueCodes\UniqueCodes;
 
 class UniqueCodesTest extends TestCase
 {
