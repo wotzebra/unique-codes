@@ -2,6 +2,10 @@
 
 All notable changes to `unique-codes` will be documented in this file
 
+## 3.0.0 - 2024-09-28
+
+- Changed: Change namespace from 'NextApps' to 'Wotz' ([#13](https://github.com/wotzebra/unique-codes/pull/13))
+
 ## 2.3.2 - 2024-05-13
 
 - Fixed: Implicit conversion deprecation warning when converting float to int ([#ebd6914](https://github.com/wotzebra/unique-codes/commit/ebd6914f7bf1c843a9cf5ab888e454503400db22))
