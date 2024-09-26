@@ -1,6 +1,6 @@
 <?php
 
-namespace NextApps\UniqueCodes;
+namespace Wotz\UniqueCodes;
 
 use RuntimeException;
 

@@ -1,26 +1,18 @@
 {
-    "name": "nextapps/unique-codes",
+    "name": "wotz/unique-codes",
     "description": "Generate unique, random-looking codes",
     "keywords": [
-        "nextapps",
-        "unique-codes",
-        "vouchers",
-        "coupons"
+        "unique codes",
+        "voucher codes",
+        "coupon codes"
     ],
-    "homepage": "https://github.com/nextapps-be/unique-codes",
+    "homepage": "https://github.com/wotzebra/unique-codes",
     "license": "MIT",
     "type": "library",
     "authors": [
         {
             "name": "Günther Debrauwer",
-            "email": "gunther@nextapps.be",
-            "homepage": "https://nextapps.be",
-            "role": "Developer"
-        },
-        {
-            "name": "Evert Arnould",
-            "email": "evert@nextapps.be",
-            "homepage": "https://nextapps.be",
+            "email": "gunther.debrauwer@whoownsthezebra.be",
             "role": "Developer"
         }
     ],
@@ -35,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "NextApps\\UniqueCodes\\": "src"
+            "Wotz\\UniqueCodes\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "NextApps\\UniqueCodes\\Tests\\": "tests"
+            "Wotz\\UniqueCodes\\Tests\\": "tests"
         }
     },
     "scripts": {

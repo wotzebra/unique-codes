@@ -1,13 +1,13 @@
 # Unique Codes
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/nextapps/unique-codes.svg?style=flat-square)](https://packagist.org/packages/nextapps/unique-codes)
-[![Total Downloads](https://img.shields.io/packagist/dt/nextapps/unique-codes.svg?style=flat-square)](https://packagist.org/packages/nextapps/unique-codes)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/wotz/unique-codes.svg?style=flat-square)](https://packagist.org/packages/wotz/unique-codes)
+[![Total Downloads](https://img.shields.io/packagist/dt/wotz/unique-codes.svg?style=flat-square)](https://packagist.org/packages/wotz/unique-codes)
 
 This package generates unique, random-looking codes. These codes can be used for vouchers, coupons, ...
 You can now generate thousands or millions of codes without having to check if a code has already been generated in the past.
 
 ``` php
-use NextApps\UniqueCodes\UniqueCodes;
+use Wotz\UniqueCodes\UniqueCodes;
 
 // Generate 100 unique codes for numbers 1 to 100
 $codes = (new UniqueCodes())
@@ -25,7 +25,7 @@ $codes = (new UniqueCodes())
 You can install the package via composer:
 
 ```bash
-composer require nextapps/unique-codes
+composer require wotz/unique-codes
 ```
 > Do not use v1 of this package, as it contains bugs. If you currently use v1, you should upgrade to v2 (Read the upgrading guide!).
 
@@ -128,7 +128,6 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 ## Credits
 
 - [Günther Debrauwer](https://github.com/gdebrauwer)
-- [Evert Arnould](https://github.com/earnould)
 - [All Contributors](../../contributors)
 
 This package is heavily inspired by 2 articles written by Jim Mischel:
