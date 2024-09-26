@@ -1,5 +1,10 @@
 # Upgrading
 
+## From v2 to v3
+
+- Install `wotz/unique-codes` instead of `nextapps/unique-codes`
+- Replace all occurrences of `NextApps\UniqueCodes` namespace with new `Wotz\UniqueCodes` namespace
+
 ## From v1 to v2
 
 - The `setPrime` method has been renamed to `setObfuscatingPrime'`. The number you provide to this method should also be larger than the prime number you provide to the `setMaxPrime` number.
