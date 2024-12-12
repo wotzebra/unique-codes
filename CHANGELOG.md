@@ -2,6 +2,10 @@
 
 All notable changes to `unique-codes` will be documented in this file
 
+## 3.1.0 - 2024-12-12
+
+- Added: PHP 8.4 support ([#14](https://github.com/wotzebra/unique-codes/pull/14))
+
 ## 3.0.0 - 2024-09-28
 
 - Changed: Change namespace from 'NextApps' to 'Wotz' ([#13](https://github.com/wotzebra/unique-codes/pull/13))
