@@ -2,6 +2,10 @@
 
 All notable changes to `unique-codes` will be documented in this file
 
+## 3.2.0 - 2026-03-18
+
+- Added: PHP 8.5 support ([#15](https://github.com/wotzebra/unique-codes/pull/15))
+
 ## 3.1.0 - 2024-12-12
 
 - Added: PHP 8.4 support ([#14](https://github.com/wotzebra/unique-codes/pull/14))
